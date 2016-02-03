@@ -21,7 +21,7 @@ The "name" you specify in the download forms will become the comics folder name.
 There is no installer or package file for ComicSquirrel yet. For now you'll have to install this manually, like this. 
 
 2. When you've downloaded these files to your computer, use something like WinSCP to move all the files (except "squirrel.conf") to your NAS, to any location you like. For example, to "/volume1/ComicSquirrel/"
-3. Open "squirrel.conf", an upstart script, and change line 18 so it reflects the correct location of these files.
+3. Open "squirrel.conf", an upstart script, and change line 18 so it reflects the correct location of these files:       
   exec /usr/bin/node /volume1/development/ComicSquirrel/server  --> exec /usr/bin/node /volume1/ComicSquirrel/server
 4. Transfer the "squirrel.conf" file to folder "/etc/init/" on your NAS. 
 5. Open a console via WniSCP or Putty, and start the app by typing "start squirrel". 
