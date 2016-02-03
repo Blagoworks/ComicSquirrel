@@ -1,0 +1,75 @@
+<div class="content">
+	<h2>Batch-download archived web comics</h2>
+	
+	<div class="page-intro">Download a series of images within a range, based on a comic's page url - or even based on an image url. Useful for getting some older comics.<br>
+	Hint: also works with the Wayback Machine's image urls!</div>
+	
+	<ul id="tabs" class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active">
+			<a href="#box-archive-page" aria-controls="box-archive-page" role="tab" data-toggle="tab" 
+				ng-click="vm.resetForm('tab2form')">By archive page</a></li>
+		<li role="presentation">
+			<a href="#box-archive-url" aria-controls="box-archive-url" role="tab" data-toggle="tab"
+				ng-click="vm.resetForm('mainform')">Directly from img url</a></li>
+	</ul>
+	
+	
+	<div class="tab-content">
+		
+			<!-- first tab - Get all images from archived comics pages -->
+			<div id="box-archive-page" role="tabpanel" class="form-wrap tab-pane fade in active">	
+				<form name="mainform" id="mainform" class="form-horizontal" role="form" novalidate>
+				
+					<div ng-include src="'/templates/tpl_archivedItems_page.html'">template content for first tab</div>
+					
+					<div class="btn-row stat-row bottom-brdr">
+						<div class="stat-msg-wrap" ng-class="vm.fetchstatus">					
+							<div ng-include src="'/templates/tpl_statusmsgs.html'">status msgs</div>
+						</div>
+						
+						<div class="btn-row text-right">
+							<button type="button" class="btn"
+								ng-click="vm.fetchArchiveds(archiveFormData,'testrun')"
+								ng-disabled="!mainform.$dirty || mainform.$invalid">Test</button>
+							<button type="submit" class="btn btn-primary"
+								ng-click="vm.fetchArchiveds(archiveFormData,'full')"
+								ng-disabled="!mainform.$dirty || mainform.$invalid">Fetch</button>
+							<button type="button" class="btn"
+								ng-disabled="!mainform.$dirty"
+								ng-click="vm.resetForm('mainform');">Clear form</button>
+						</div>	
+					</div>
+				</form>
+			</div>
+		
+		
+			<!-- second tab - get images from an image url -->
+			<div id="box-archive-url" role="tabpanel" class="form-wrap tab-pane fade">	
+				<form name="tab2form" class="form-horizontal" role="form" novalidate>
+
+					<div ng-include src="'/templates/tpl_archivedItems_img.html'">template content for second tab</div>
+
+						<div class="btn-row stat-row bottom-brdr">
+							<div class="stat-msg-wrap" ng-class="vm.fetchstatus">
+								<div ng-include src="'/templates/tpl_statusmsgs.html'">status msgs</div>
+							</div>
+							
+							<div class="btn-row text-right">
+								<button type="button" class="btn"
+									ng-click="vm.fetchArchiveds(imgFormData,'testrun')"
+									ng-disabled="!tab2form.$dirty || tab2form.$invalid">Test</button>
+								<button type="submit" class="btn btn-primary"
+									ng-click="vm.fetchArchiveds(imgFormData,'full')"
+									ng-disabled="!tab2form.$dirty || tab2form.$invalid">Fetch</button>
+								<button type="button" class="btn"
+									ng-disabled="!tab2form.$dirty"
+									ng-click="vm.resetForm('tab2form');">Clear form</button>
+							</div>
+						</div>	
+				</form>	
+			</div>
+		
+	</div>
+	
+	
+</div>

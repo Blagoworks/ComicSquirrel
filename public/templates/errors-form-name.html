@@ -1,0 +1,11 @@
+<div class="error-msg" ng-show="mainform.comicname.$dirty && mainform.comicname.$invalid">
+	<small class="error" ng-show="mainform.comicname.$error.required">Please make sure to fill in a name</small>
+	<small class="error" ng-show="mainform.comicname.$error.minlength">The name needs to be at least 3 characters long</small>
+	<small class="error" ng-show="mainform.comicname.$error.maxlength">The name cannot be longer than 50 characters</small>
+</div>
+
+<div class="error-msg" ng-show="tab2form.comicname.$dirty && tab2form.comicname.$invalid">
+	<small class="error" ng-show="tab2form.comicname.$error.required">Please make sure to fill in a name</small>
+	<small class="error" ng-show="tab2form.comicname.$error.minlength">The name needs to be at least 3 characters long</small>
+	<small class="error" ng-show="tab2form.comicname.$error.maxlength">The name cannot be longer than 50 characters</small>
+</div>

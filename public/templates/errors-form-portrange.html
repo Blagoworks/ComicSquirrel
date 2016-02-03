@@ -1,0 +1,7 @@
+<!-- port number range errors -->
+<div class="error-msg" ng-show="settingsform.customport.$dirty && settingsform.customport.$invalid">
+	<small class="error" 
+		ng-show="settingsform.customport.$error.min || settingsform.customport.$error.max">Please choose a port between 1400 and 9999</small>
+	<small class="error" 
+		ng-show="settingsform.customport.$error.required">Please fill in a port number between 1400 and 9999</small>
+</div>

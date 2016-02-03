@@ -1,0 +1,91 @@
+<div class="form-group">
+					<label for="comicname">Comic name:</label>
+					<input type="text" class="form-control flexw-40" name="comicname" placeholder="Comic Name"
+						ng-model="vm.archiveName" 
+						ng-model-options="{ updateOn:'blur' }"
+						ng-minlength=3 ng-maxlength=50 required>
+					<p class="help-block">This name will be used as a folder name to store the comics in.</p>
+				</div>
+				<div errors-form-name></div>
+				
+				<div class="form-group">
+					<label for="archiveFirstUrl">First image's url:</label>
+					<input type="url" class="form-control flexw-40" name="pageurl" placeholder="http://comicsite/comic.php?comicid=1"
+						ng-model="vm.archiveFirstUrl" 
+						ng-model-options="{ updateOn:'blur' }" required>
+					<p class="help-block">The url of the first comic image in the range</p>
+				</div>
+				<div errors-form-url></div>
+					
+				<div class="form-group">
+					<label for="archiveMethod">Method:</label>
+					<div class="form-ctrl-wrap inline flexw-40">
+						<div id="methodToggle" class="btn-group" data-toggle="buttons">
+							<label class="btn btn-default active" ng-click="vm.updateMethodToggle('number')">
+								<i class="fa"></i>
+								<input type="radio" id="rad-number" name="archiveMethod" value="number" /> by number
+							</label> 
+							<label class="btn btn-default" ng-click="vm.updateMethodToggle('date')">
+								<i class="fa"></i>
+								<input type="radio" id="rad-date" name="archiveMethod" value="date" /> by date
+							</label> 
+						</div>
+					</div>
+					<p class="help-block">Does the image url refer to a number (page=1) or a date (date=20021104)?</p>
+				</div>				
+				
+				<div class="form-group" ng-show="vm.archiveMethod=='date'">
+					<label for="dateFormat">Url date format:</label>
+					<input type="text" class="form-control flexw-40" name="dateformat" placeholder="yyyy-mm-dd"
+						ng-model="vm.dateFormat"
+						ng-model-options="{ updateOn:'blur' }"	
+						ng-minlength=8 ng-maxlength=10 required>
+					<p class="help-block">The format of the date in the image's url: i.e yyyymmdd or yyyy-mm-dd</p>
+				</div>
+				<div errors-form-dateformat></div>	
+				
+				<div class="form-group">
+					<label for="archiveRange">Range:</label>					
+					<div class="form-ctrl-wrap inline flexw-40" ng-show="vm.archiveMethod=='number'">
+						<span>from </span>
+						<input type="text" name="minRange" class="form-control fixw-80"
+								 ng-model="vm.minRange"	
+								 ng-model-options="{updateOn:'blur'}"
+								 min="0" max="{{vm.maxRange}}"
+								 number-lower-than="{{vm.maxRange}}">
+						<span>to </span>
+						<input type="text" name="maxRange" class="form-control fixw-80"
+								 ng-model="vm.maxRange"
+								 ng-model-options="{updateOn:'blur'}"
+								 min="{{vm.minRange}}" max="9999" 
+								 number-greater-than="{{vm.minRange}}">
+					</div>
+					<p class="help-block" ng-show="vm.archiveMethod=='number'">Which images to get. Leave blank to try to get all.</p>
+
+					<div class="form-ctrl-wrap no-padd inline flexw-40" ng-show="vm.archiveMethod=='date'">
+						<div class="dp-control-wrap" id="range-picker">
+							<div class="input-daterange input-group" id="datepicker">
+								<input type="text" class="form-control" name="minDate" id="rangeStart" placeholder="Start date"
+									ng-model="vm.minDate" date-lower-than="{{vm.maxDate | date:'short'}}">
+								<span class="input-group-addon">to</span>
+								<input type="text" class="form-control" name="maxDate" id="rangeEnd" placeholder="End date"
+									ng-model="vm.maxDate" date-greater-than="{{vm.minDate | date:'short'}}">
+							</div>
+						</div>
+					</div>				
+					<p class="help-block" ng-show="vm.archiveMethod=='date'">Which pages to get. This needs both a from- and a to- date.</p>
+				</div>
+				<div errors-number-range></div>
+				<div errors-date-range></div>				
+				
+				<div class="btn-row bottom-brdr text-right">
+				
+					<button type="button" class="btn"
+						ng-click="vm.fetchFromUrl('testrun')"
+						ng-disabled="!mainform.$dirty || mainform.$invalid">Test</button>
+					<button type="submit" class="btn btn-primary"
+						ng-click="vm.fetchFromUrl('full')"
+						ng-disabled="!mainform.$dirty || mainform.$invalid">Fetch</button>
+					<button type="button" class="btn"
+						ng-click="vm.cancelInput()">Cancel</button>
+				</div>	

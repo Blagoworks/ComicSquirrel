@@ -1,0 +1,127 @@
+	<div class="form-group">
+		<label for="comicname">Comic name:</label>
+		<input type="text" class="form-control flexw-40" name="comicname" placeholder="Comic Name"
+			ng-model="archiveFormData.name"
+			ng-model-options="{ updateOn:'blur' }"
+			ng-minlength=3 ng-maxlength=50 required>
+		<p class="help-block">This name will be used as a folder name to store the comics in.</p>
+	</div>
+	<div errors-form-name></div>				
+
+	<div class="form-group">
+		<label for="pageurl">Archive's first url:</label>
+		<input type="url" class="form-control flexw-40" name="pageurl" placeholder="http://comicsite/comic.php?comicid=1"
+			ng-model="archiveFormData.firstUrl" 
+			ng-model-options="{ updateOn:'blur' }" required>
+		<p class="help-block">On the comics' Archive page, find the url of the first archived comic page</p>
+	</div>
+	<div errors-form-url></div>				
+
+	<div class="form-group">
+		<label for="imgdir">Image directory url:</label>
+		<input type="url" class="form-control flexw-40" name="imgdir" placeholder="http://comicsite/dir/"
+			ng-model="archiveFormData.sourceDir"
+			ng-model-options="{ updateOn:'blur' }"	>
+		<p class="help-block">When the img src on the archive page (view-source) points to a relative location, give the absolute path that is missing, to complete the url to the comic image</p>
+	</div>
+	<div errors-form-imgdir></div>			
+
+	<div class="form-group">
+		<label for="imgselector">Image selector:</label>
+		<input type="text" class="form-control flexw-40" name="imgselector" placeholder="Selector pointing to comic's img tag"
+			ng-model="archiveFormData.selector"
+			ng-model-options="{ updateOn:'blur' }"	
+			ng-minlength=3 ng-maxlength=30 required>
+		<p class="help-block">The css selector that points to the comic's img tag (i.e. "#wrapper .comicimg")</p>
+	</div>
+	<div errors-form-imgselector></div>			
+
+	<div class="form-group">
+		<label for="archivemethod">Method:</label>
+		<div class="form-ctrl-wrap inline flexw-40">
+			<div id="methodToggle" class="btn-group" data-toggle="buttons">
+				<label class="btn btn-default active" 
+					ng-click="vm.updateMethodToggle('archiveFormData','number')">
+					<i class="fa"></i>
+					<input type="radio" id="rad-number" name="archivemethod" value="number" /> by number
+				</label> 
+				<label class="btn btn-default" 
+					ng-click="vm.updateMethodToggle('archiveFormData','date')">
+					<i class="fa"></i>
+					<input type="radio" id="rad-date" name="archivemethod" value="date" /> by date
+				</label> 
+			</div>
+		</div>
+		<p class="help-block">Does the page url refer to a number (page=1) or a date (date=20160125)?</p>
+	</div>				
+
+	<div class="form-group" ng-show="archiveFormData.method=='date'">
+		<label for="dateformat">Url date format:</label>		
+		<div class="btn-group dropdown-group flexw-40" uib-dropdown is-open="vm.archiveDropdown.opened">
+			<button id="dropdown-button" type="button" class="btn btn-dropdown" uib-dropdown-toggle>
+				{{ archiveFormData.dateFormat? archiveFormData.dateFormat : vm.dateFormats[0] }} 
+				<i class="fa"></i>
+			</button>
+			<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dropdown-button">
+				<li role="menuitem"><a href="#" class="option placeholder" 
+					ng-class="(archiveFormData.dateFormat==vm.dateFormats[0])? 'selected':''">{{vm.dateFormats[0]}}</a></li>
+				<li class="divider"></li>
+				<li role="menuitem"><a class="option" href="#"
+					ng-class="(archiveFormData.dateFormat==vm.dateFormats[1])? 'selected':''"
+					ng-click="archiveFormData.dateFormat = vm.dateFormats[1]">{{vm.dateFormats[1]}}</a></li>
+				<li role="menuitem"><a class="option" href="#" 
+					ng-class="(archiveFormData.dateFormat==vm.dateFormats[2])? 'selected':''"
+					ng-click="archiveFormData.dateFormat = vm.dateFormats[2]">{{vm.dateFormats[2]}}</a></li>
+				<li role="menuitem"><a class="option" href="#" 
+					ng-class="(archiveFormData.dateFormat==vm.dateFormats[3])? 'selected':''"
+					ng-click="archiveFormData.dateFormat = vm.dateFormats[3]">{{vm.dateFormats[3]}}</a></li>
+			</ul>
+		</div>		
+		<p class="help-block">The format of the date in the archive page's url: i.e 20160125 or 2016-01-25</p>
+	</div>
+	<div errors-form-dateformat></div>	
+
+	<div class="form-group">
+		<label for="archiverange">Range:</label>
+		
+		<div class="form-ctrl-wrap inline flexw-40" ng-show="archiveFormData.method=='number'">
+			<span>from </span>
+			<input type="number" name="minRange" class="form-control fixw-80"
+					 ng-model="archiveFormData.minRange"	
+					 ng-model-options="{updateOn:'blur'}"
+					 min="0" max="{{archiveFormData.maxRange}}"
+					 number-lower-than="{{archiveFormData.maxRange}}">
+			<span>to </span>
+			<input type="number" name="maxRange" class="form-control fixw-80"
+					 ng-model="archiveFormData.maxRange"
+					 ng-model-options="{updateOn:'blur'}"
+					 min="{{archiveFormData.minRange}}" max="9999" 
+					 number-greater-than="{{archiveFormData.minRange}}">
+		</div>
+		<p class="help-block" ng-show="archiveFormData.method=='number'">Which pages to get. Leave blank to try to get all, counting up from the first url.</p>
+
+		<div class="form-ctrl-wrap no-padd inline flexw-40" ng-show="archiveFormData.method=='date'">
+			<div class="datepicker-wrap" id="range-picker">
+				<div class="input-daterange input-group" id="datepicker">
+					<input type="text" class="form-control" name="minDate" placeholder="Start date"
+						uib-datepicker-popup="{{archiveFormData.dateFormat}}" datepicker-options="vm.dateOptions"
+						show-button-bar="false" custom-class="vm.getDayClass(archiveFormData,date, mode)"
+						ng-model="archiveFormData.minDate" date-lower-than="{{archiveFormData.maxDate | date:'short'}}"
+						max-date="archiveFormData.maxDate? archiveFormData.maxDate : vm.todayDate" 
+						ng-click="vm.showCalendar(1)" is-open="vm.calendar1.opened" 
+						date-disabled="vm.isDisabled(date, mode)" ng-required="archiveFormData.method=='date'">
+					<span class="input-group-addon">to</span>
+					<input type="text" class="form-control" name="maxDate" placeholder="End date"
+						uib-datepicker-popup="{{archiveFormData.dateFormat}}" datepicker-options="vm.dateOptions" 
+						show-button-bar="false" custom-class="vm.getDayClass(archiveFormData,date, mode)"
+						ng-model="archiveFormData.maxDate" date-greater-than="{{archiveFormData.minDate | date:archiveFormData.dateFormat}}"
+						min-date="archiveFormData.minDate" max-date="vm.todayDate"	
+						ng-click="vm.showCalendar(2)" is-open="vm.calendar2.opened" 
+						date-disabled="vm.isDisabled(date, mode)" ng-required="archiveFormData.method=='date'">		
+				</div>
+			</div>
+		</div>				
+		<p class="help-block" ng-show="archiveFormData.method=='date'">Which pages to get. This needs both a from- and a to- date.</p>
+	</div>
+	<div errors-number-range></div>
+	<div errors-date-range></div>

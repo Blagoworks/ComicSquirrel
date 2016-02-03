@@ -1,0 +1,109 @@
+					
+	<div class="form-group">
+		<label for="comicname">Comic name:</label>
+		<input type="text" class="form-control flexw-40" name="comicname" placeholder="Comic Name"
+			ng-model="imgFormData.name" 
+			ng-model-options="{ updateOn:'blur' }"
+			ng-minlength=3 ng-maxlength=50 required>
+		<p class="help-block">This name will be used as a folder name to store the comics in.</p>
+	</div>
+	<div errors-form-name></div>
+
+	<div class="form-group">
+		<label for="pageurl">First image's url:</label>
+		<input type="url" class="form-control flexw-40" name="pageurl" placeholder="http://comicsarchive/images/ch1-p001.jpg"
+			ng-model="imgFormData.firstUrl" 
+			ng-model-options="{ updateOn:'blur' }" required>
+		<p class="help-block">The url of the first comic image in the range</p>
+	</div>
+	<div errors-form-url></div>
+		
+	<div class="form-group">
+		<label for="archiveMethod">Method:</label>
+		<div class="form-ctrl-wrap inline flexw-40">
+			<!-- NB radiobtn-set -- when number/date toggle uses ONE #id, this breaks validation, keeps Fetch btn disabled -->
+			<div id="methodToggleTab2" class="btn-group" data-toggle="buttons">
+				<label class="btn btn-default active" ng-click="vm.updateMethodToggle('imgFormData','number')">
+					<i class="fa"></i>
+					<input type="radio" id="rad-number2" name="archivemethod2" value="number" /> by number
+				</label> 
+				<label class="btn btn-default" ng-click="vm.updateMethodToggle('imgFormData','date')">
+					<i class="fa"></i>
+					<input type="radio" id="rad-date2" name="archivemethod2" value="date" /> by date
+				</label> 
+			</div>
+		</div>
+		<p class="help-block">The image url uses a number, for ex. "p001.jpg"</p>
+	</div>
+
+	<div class="form-group" ng-show="imgFormData.method=='date'">
+		<label for="dateformat">Url date format:</label>		
+		<div class="btn-group dropdown-group flexw-40" uib-dropdown is-open="vm.imgDropdown.opened">
+			<button id="dropdown-button" type="button" class="btn btn-dropdown" uib-dropdown-toggle>
+				{{ imgFormData.dateFormat? imgFormData.dateFormat : vm.dateFormats[0] }} 
+				<i class="fa"></i>
+			</button>
+			<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="dropdown-button">
+				<li role="menuitem"><a href="#" class="option placeholder" 
+					ng-class="(imgFormData.dateFormat==vm.dateFormats[0])? 'selected':''">{{vm.dateFormats[0]}}</a></li>
+				<li class="divider"></li>
+				<li role="menuitem"><a class="option" href="#"
+					ng-class="(imgFormData.dateFormat==vm.dateFormats[1])? 'selected':''"
+					ng-click="imgFormData.dateFormat = vm.dateFormats[1]">{{vm.dateFormats[1]}}</a></li>
+				<li role="menuitem"><a class="option" href="#" 
+					ng-class="(imgFormData.dateFormat==vm.dateFormats[2])? 'selected':''"
+					ng-click="imgFormData.dateFormat = vm.dateFormats[2]">{{vm.dateFormats[2]}}</a></li>
+				<li role="menuitem"><a class="option" href="#" 
+					ng-class="(imgFormData.dateFormat==vm.dateFormats[3])? 'selected':''"
+					ng-click="imgFormData.dateFormat = vm.dateFormats[3]">{{vm.dateFormats[3]}}</a></li>	
+			</ul>
+		</div>		
+		<p class="help-block">The format of the date in the archive page's url: i.e 20160125 or 2016-01-25</p>
+	</div>
+	<div errors-form-dateformat></div>
+					
+
+	<div class="form-group">
+		<label for="archiveRange">Range:</label>					
+		<div class="form-ctrl-wrap inline flexw-40" ng-show="imgFormData.method=='number'">
+			<span>from </span>
+			<input type="number" name="minRange" class="form-control fixw-80"
+					 ng-model="imgFormData.minRange"	
+					 ng-model-options="{updateOn:'blur'}"
+					 min="0" max="{{imgFormData.maxRange}}"
+					 number-lower-than="{{imgFormData.maxRange}}">
+			<span>to </span>
+			<input type="number" name="maxRange" class="form-control fixw-80"
+					 ng-model="imgFormData.maxRange"
+					 ng-model-options="{updateOn:'blur'}"
+					 min="{{imgFormData.minRange}}" max="9999" 
+					 number-greater-than="{{imgFormData.minRange}}">
+		</div>
+		<p class="help-block" ng-show="imgFormData.method=='number'">Which images to get. Leave blank to try to get all, counting up from the first url.</p>
+		
+		<div class="form-ctrl-wrap no-padd inline flexw-40" ng-show="imgFormData.method=='date'">
+			<div class="datepicker-wrap" id="range-picker2">
+				<div class="input-daterange input-group" id="datepicker2">
+					<input type="text" class="form-control" name="minDate" placeholder="Start date"
+						uib-datepicker-popup="{{imgFormData.dateFormat}}" datepicker-options="vm.dateOptions"
+						show-button-bar="false" custom-class="vm.getDayClass(imgFormData,date, mode)"
+						ng-model="imgFormData.minDate" date-lower-than="{{imgFormData.maxDate | date:'short'}}"
+						max-date="imgFormData.maxDate? imgFormData.maxDate : vm.todayDate" 
+						ng-click="vm.showCalendar(1)" is-open="vm.calendar1.opened" 
+						date-disabled="vm.isDisabled(date, mode)" ng-required="imgFormData.method=='date'">
+					<span class="input-group-addon">to</span>
+					<input type="text" class="form-control" name="maxDate" placeholder="End date"
+						uib-datepicker-popup="{{imgFormData.dateFormat}}" datepicker-options="vm.dateOptions" 
+						show-button-bar="false" custom-class="vm.getDayClass(imgFormData,date, mode)"
+						ng-model="imgFormData.maxDate" date-greater-than="{{imgFormData.minDate | date:imgFormData.dateFormat}}"
+						min-date="imgFormData.minDate" max-date="vm.todayDate"	
+						ng-click="vm.showCalendar(2)" is-open="vm.calendar2.opened" 
+						date-disabled="vm.isDisabled(date, mode)" ng-required="imgFormData.method=='date'">		
+				</div>
+			</div>
+		</div>				
+		<p class="help-block" ng-show="imgFormData.method=='date'">Which pages to get. This needs both a from- and a to- date.</p>
+						
+	</div>
+	<div errors-number-range></div>
+	<div errors-date-range></div>	

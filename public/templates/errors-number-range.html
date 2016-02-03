@@ -1,0 +1,22 @@
+<!-- number range errors -->
+<div class="error-msg" ng-show="mainform.$invalid && mainform.minRange.$error.numberLowerThan && !mainform.$pristine">
+	<small class="error" 
+		ng-show="mainform.minRange.$error.required && mainform.minRange.$error.numberLowerThan">A minimum is required</small>
+	<small class="error" 
+		ng-show="mainform.maxRange.$error.required && mainform.maxRange.$error.numberGreaterThan">A maximum is required</small>
+	<small class="error" 
+		ng-show="mainform.minRange.$touched && mainform.maxRange.$touched &&
+		mainform.minRange.$error.numberLowerThan &&  mainform.maxRange.$error.numberGreaterThan &&
+		!mainform.minRange.$error.required && !mainform.maxRange.$error.required">The minimum should be lower than the maximum</small>
+</div>
+
+<div class="error-msg" ng-show="tab2form.$invalid && tab2form.minRange.$error.numberLowerThan && !tab2form.$pristine">
+	<small class="error" 
+		ng-show="tab2form.minRange.$error.required && tab2form.minRange.$error.numberLowerThan">A minimum is required</small>
+	<small class="error" 
+		ng-show="tab2form.maxRange.$error.required && tab2form.maxRange.$error.numberGreaterThan">A maximum is required</small>
+	<small class="error" 
+		ng-show="tab2form.minRange.$touched && tab2form.maxRange.$touched &&
+		tab2form.minRange.$error.numberLowerThan &&  tab2form.maxRange.$error.numberGreaterThan &&
+		!tab2form.minRange.$error.required && !tab2form.maxRange.$error.required">The minimum should be lower than the maximum</small>
+</div>

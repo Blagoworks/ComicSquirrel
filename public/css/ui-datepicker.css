@@ -1,0 +1,55 @@
+/*----- colors -----
+
+bg-dark			#414141
+bg-disabled		#313131
+
+btn normal		#5a5d5b
+text				#87989e
+grey hover		#718288
+green		#598527
+//----------------*/
+
+/* "to" txt between inputs */
+.input-daterange .input-group-addon  { padding:6px 12px; background-color:transparent; color:#87989e; border:0 none transparent; text-shadow:none; }
+
+.dropdown-menu 	{ background-color:#414141; padding:3px 3px 4px 4px; /* minus top,right padd of td's */ }
+
+/*calendar*/
+.uib-datepicker table,
+.uib-datepicker table:focus	{ background-color:#414141; border:0 none; outline:none; outline-width:0; }
+.uib-datepicker th,
+.uib-datepicker td			{ background:transparent; border-radius:0; border:0 none; 
+	padding:0; padding-top:1px; padding-right:1px; font-weight:400; }
+.uib-datepicker th:hover,
+.uib-datepicker td:hover	{ background:transparent; border:0 none; }
+
+/* normal dates btns */
+.uib-datepicker .btn				{ margin:0; background-color:#464746; color:#ddd; border:0 none transparent; border-radius:0; }
+.uib-datepicker .btn:hover		{ margin:0; background-color:#718288; color:#fff; }
+	.uib-datepicker .text-muted	{ color:#777; }
+	.uib-datepicker .btn:hover .text-muted	{ color:#eee; }
+		
+/*	title row */
+.uib-datepicker th .btn			{ background-color:#5a5d5b; color:#eee; border-radius:6px; }
+.uib-datepicker .btn.uib-title			{ background:transparent; }
+.uib-datepicker .btn.uib-title:hover	{ background-color:#5a5d5b; }
+.uib-title strong	{ font-weight:400; }
+
+/* first & last dates btns selected in a range, via custom-class */
+/*td*/
+.maxdate .btn,
+.mindate .btn	{ background-color:#598527; color:#fff; /*green*/ }
+	.uib-datepicker .text-info	{ color:#fff; }
+	.uib-datepicker .maxdate .text-muted	{ color:#eee; }
+	.uib-datepicker .mindate .text-muted	{ color:#eee; }
+	.uib-datepicker .range .text-muted		{ color:#999; }
+
+.maxdate .btn	{ border-top-left-radius:0; border-bottom-left-radius:0; border-top-right-radius:6px; border-bottom-right-radius:6px; }
+.mindate .btn 	{ border-top-left-radius:6px; border-bottom-left-radius:6px; border-top-right-radius:0; border-bottom-right-radius:0; }
+.range .btn		{ background-color:#5a5d5b; }
+
+.maxdate .btn:hover,
+.mindate .btn:hover	{ background-color:#598527; /*green*/ }
+
+.uib-datepicker .btn[disabled]	{ background-color:#313131; color:#87989e; }
+

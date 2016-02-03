@@ -1,0 +1,24 @@
+<div class="fetch-msg" ng-show="vm.fetchingInProgress">
+	<i class="fa fa-spinner fa-spin"></i>
+	<span class="msg">Fetching... download count:</span>
+	<span class="badge progress-bar-success">
+		<span class="roll-evt"><span class="count" ng-class="{'new':vm.countchanged}" data-title="{{vm.newcount}}">{{vm.oldcount}}</span></span>
+	</span>
+</div>
+<div class="fetch-msg" ng-show="vm.fetchingDone && vm.fetchTestResult">
+	<i class="fa" ng-class="vm.fetchstatusicon"></i>
+	<span class="msg">{{vm.teststatustxt}} {{vm.errormsg}}</span>
+</div>
+<div class="fetch-msg" ng-show="vm.fetchingDone && !vm.fetchTestResult && !vm.errormsg">
+	<i class="fa" ng-class="vm.fetchstatusicon"></i>
+	<span class="msg">Finished! Downloaded <span class="badge">{{vm.dlcount}}</span>{{vm.imgstr}}{{vm.skipped}} </span>
+</div>
+<div class="fetch-msg" ng-show="vm.fetchingDone && !vm.fetchTestResult && vm.errormsg">
+	<i class="fa" ng-class="vm.fetchstatusicon"></i>
+	<span class="msg">Downloaded <span class="badge">{{vm.dlcount}}</span> {{vm.imgstr}}{{vm.skipped}}. 
+		Stopped on an error ({{vm.errormsg}})</span>
+</div>
+<div class="fetch-msg" ng-show="vm.fetchingError">
+	<i class="fa" ng-class="vm.fetchstatusicon"></i>
+	<span class="msg">Fetch error: nothing found. {{vm.errormsg}}</span>
+</div>

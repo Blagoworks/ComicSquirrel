@@ -1,0 +1,42 @@
+<h4>Edit web comic:</h4>
+<form name="editForm" role="form" novalidate>
+	<div class="form-group">
+		<label for="editComicName">Name:</label>
+		<input type="text" class="form-control flexw-40" placeholder="Name"
+			ng-model="vm.editComicName" 
+			ng-minlength=3 ng-maxlength=50 required>
+		<p class="help-block">This name will be used as a folder name to store the comics in</p>
+	</div>
+	<div class="form-group">
+		<label for="editComicUrl">Current comic url:</label>
+		<input type="url" class="form-control flexw-40" placeholder="Current comic's page url"
+			ng-model="vm.editComicUrl" required>
+		<p class="help-block">The url of the page where the latest comic is displayed on</p>
+	</div>
+	<div class="form-group">
+		<label for="editComicSourceDir">Image directory url:</label>
+		<input type="url" class="form-control flexw-40" placeholder="Url pointing to image directory"
+			ng-model="vm.editComicSourceDir" required>
+		<p class="help-block">Full path to the directory where comic images are stored (view-source, img src)</p>
+	</div>
+	<div class="form-group">
+		<label for="editComicSelector">Image selector:</label>
+		<input type="text" class="form-control flexw-40" placeholder="Selector pointing to comic's img tag"
+			ng-model="vm.editComicSelector" required>
+		<p class="help-block">The css selector that points to the comic's img tag (i.e. "#wrapper .comicimg")</p>
+	</div>
+	<div class="btn-row bottom-brdr text-right">
+		<span class="stat-msg" ng-class="{shownfade:vm.editstatustxt.length>0}">
+			<small>{{ vm.editstatustxt }}</small>
+			<i class="fa" ng-class="vm.editstatusicon"></i>
+		</span>
+		<button type="button" class="btn"
+			ng-click="vm.testrunItem('editForm')"
+			ng-disabled="!editForm.$dirty || editForm.$invalid">Test</button>
+		<button type="submit" class="btn btn-primary"
+			ng-click="vm.updateItem()"
+			ng-disabled="!editForm.$dirty || editForm.$invalid">Done</button>
+		<button type="button" class="btn"
+			ng-click="vm.cancelEdit(item)">Cancel</button>
+	</div>
+</form>

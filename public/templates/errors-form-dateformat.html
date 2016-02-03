@@ -1,0 +1,11 @@
+<div class="error-msg" ng-show="mainform.dateformat.$dirty && mainform.dateformat.$invalid">
+	<small class="error" ng-show="mainform.dateformat.$error.required">Please make sure to add a date format</small>
+	<small class="error" ng-show="mainform.dateformat.$error.minlength">The format needs to be at least 8 characters long</small>
+	<small class="error" ng-show="mainform.dateformat.$error.maxlength">The format cannot be longer than 10 characters</small>
+</div>
+
+<div class="error-msg" ng-show="tab2form.dateformat.$dirty && tab2form.dateformat.$invalid">
+	<small class="error" ng-show="tab2form.dateformat.$error.required">Please make sure to add a date format</small>
+	<small class="error" ng-show="tab2form.dateformat.$error.minlength">The format needs to be at least 8 characters long</small>
+	<small class="error" ng-show="tab2form.dateformat.$error.maxlength">The format cannot be longer than 10 characters</small>
+</div>

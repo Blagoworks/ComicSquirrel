@@ -1,0 +1,56 @@
+<h4>Add a new web comic:</h4>
+<form name="mainform" role="form" novalidate>
+	<div class="form-group">
+		<label for="newComicName">Name:</label>
+		<input type="text" class="form-control flexw-40" name="comicname" placeholder="Comic Name"
+			ng-model="vm.newComicName" 
+			ng-model-options="{ updateOn:'blur' }"
+			ng-minlength=3 ng-maxlength=50 required>
+		<p class="help-block">This name will be used as a folder name to store the comics in</p>
+	</div>
+	<div errors-form-name></div>
+	
+	<div class="form-group">
+		<label for="newComicUrl">Current comic url:</label>
+		<input type="url" class="form-control flexw-40" name="pageurl" placeholder="http:// current comic's page url"
+			ng-model="vm.newComicUrl"
+			ng-model-options="{ updateOn:'blur' }"
+			required>
+		<p class="help-block">The url the page where the latest comic is displayed on</p>
+	</div>
+	<div errors-form-url></div>
+	
+	<div class="form-group">
+		<label for="newComicSourceDir">Image directory url:</label>
+		<input type="url" class="form-control flexw-40" name="imgdir" placeholder="http:// url pointing to image directory"
+			ng-model="vm.newComicSourceDir"
+			ng-model-options="{ updateOn:'blur' }"	
+			required>
+		<p class="help-block">When the img src (view-source) points to a relative location, give the absolute path that is missing, to complete the url to an image</p>
+	</div>
+	<div errors-form-imgdir></div>
+	
+	<div class="form-group">
+		<label for="newComicSelector">Image selector:</label>
+		<input type="text" class="form-control flexw-40" name="imgselector" placeholder="Selector pointing to comic's img tag"
+			ng-model="vm.newComicSelector"
+			ng-model-options="{ updateOn:'blur' }"	
+			ng-minlength=3 ng-maxlength=30 required>
+		<p class="help-block">The css selector that points to the comic's img tag (i.e. "#wrapper .comicimg")</p>
+	</div>
+	<div errors-form-imgselector></div>
+
+	<div class="btn-row bottom-brdr text-right">
+		<span class="stat-msg" ng-class="{shownfade:vm.addstatustxt.length>0}">
+			<small>{{ vm.addstatustxt }}</small><i class="fa" ng-class="vm.addstatusicon"></i>
+		</span>
+		<button type="button" class="btn"
+			ng-click="vm.testrunItem('addForm')"
+			ng-disabled="!mainform.$dirty || mainform.$invalid">Test</button>
+		<button type="submit" class="btn btn-primary"
+			ng-click="vm.addItem(); mainform.$setPristine(); mainform.$setUntouched();"
+			ng-disabled="!mainform.$dirty || mainform.$invalid">Add</button>
+		<button type="reset" class="btn"
+			ng-click="vm.closeAddPanel(); mainform.$setPristine(); mainform.$setUntouched();">Close</button>
+	</div>
+</form>

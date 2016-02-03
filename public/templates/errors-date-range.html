@@ -1,0 +1,16 @@
+<!-- date range errors -->
+<div class="error-msg" ng-show="!mainform.$pristine && mainform.minDate.$error.dateLowerThan ||
+		!mainform.$pristine && mainform.maxDate.$error.dateGreaterThan">
+	<small class="error" 
+		ng-show="mainform.minDate.$error.dateLowerThan && mainform.maxDate.$dirty && mainform.maxDate.$viewValue.length > 0">Please fill in a minimum date</small>
+	<small class="error max-indent" 
+		ng-show="mainform.maxDate.$error.dateGreaterThan && mainform.minDate.$dirty && mainform.minDate.$viewValue.length > 0">Please fill in a maximum date</small>
+</div>
+
+<div class="error-msg" ng-show="!tab2form.$pristine && tab2form.minDate.$error.dateLowerThan ||
+		!tab2form.$pristine && tab2form.maxDate.$error.dateGreaterThan">
+	<small class="error" 
+		ng-show="tab2form.minDate.$error.dateLowerThan && tab2form.maxDate.$dirty && tab2form.maxDate.$viewValue.length > 0">Please fill in a minimum date</small>
+	<small class="error max-indent" 
+		ng-show="tab2form.maxDate.$error.dateGreaterThan && tab2form.minDate.$dirty && tab2form.minDate.$viewValue.length > 0">Please fill in a maximum date</small>
+</div>

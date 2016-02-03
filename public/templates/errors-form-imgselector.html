@@ -1,0 +1,5 @@
+<div class="error-msg" ng-show="mainform.imgselector.$dirty && mainform.imgselector.$invalid">
+	<small class="error" ng-show="mainform.imgselector.$error.required">Please make sure to add a selector</small>
+	<small class="error" ng-show="mainform.imgselector.$error.minlength">The selector needs to be at least 3 characters long</small>
+	<small class="error" ng-show="mainform.imgselector.$error.maxlength">The selector cannot be longer than 30 characters</small>
+</div>

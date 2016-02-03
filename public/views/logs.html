@@ -1,0 +1,25 @@
+<div class="content">
+	<h2>Logs</h2>
+	
+	<div class="page-intro">The results of scheduled and manual actions that the app has undertaken are logged here. Most recent entries are on top.</div>
+	
+	<a id="log-top"></a>
+	<div id="box-logs" class="form-wrap top-brdr">
+		<form name="mainform" role="form" novalidate>
+			<div class="btn-row text-right">
+				<span class="help-block">{{ vm.helptext }}</span>
+				<button type="button" class="btn"
+						ng-click="vm.clearLogs()">Clear logs</button>
+			</div>
+			<div class="bg-dark">
+				<pre>{{ vm.logtext }}</pre>
+			</div>	
+			<div class="last-row btn-row text-right">
+				<a href="#log-top">back to top <i class="fa fa-sm fa-arrow-up"></i></a>
+				<button type="button" class="btn"
+						ng-click="vm.clearLogs()">Clear logs</button>
+			</div>
+		</form>
+	</div>	
+	
+</div>

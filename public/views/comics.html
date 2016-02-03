@@ -1,0 +1,116 @@
+<div class="content">
+	<h2>Automated download of daily web comics</h2>
+	
+	<div class="page-intro">Schedule a daily download of regularly appearing web comic images to your NAS, so you'll never skip one again. Then binge-read them at your convenience, streaming them to your favorite comics reader.</div>
+	
+	<!-- Listing active comics -->
+	<table class="overview">
+		<tr class="row bottom-brdr">
+			<td colspan="6" class="text-right">
+				<button type="submit" id="btn-add-item" class="btn btn-primary" 
+					ng-class="{active:vm.addboxVisible}"
+					ng-click="vm.showAddBox(!vm.addboxVisible)">Add web comic 
+						<i class="fa fa-lg" 
+							ng-class="{'fa-chevron-circle-up':vm.addboxVisible,'fa-chevron-circle-down':!vm.addboxVisible}"></i></button>
+			</td>
+		</tr>
+		
+		<tr class="row addbox-row collapse-row" ng-class="{active:vm.addboxVisible}">
+			<td colspan="6">
+				<div id="box-add-items" class="form-wrap dynamic-wrap">
+					<div ng-include src="'/templates/tpl_addItems.html'">this should not be visible</div>
+				</div>				
+			</td>
+		</tr>
+		
+		<tr class="row thead">
+			<td>cover</td>
+			<th>name</th>
+			<td>added</td>
+			<td class="text-right">status</td>
+			<td>last download</td>
+			<td class="text-right">manage</td>
+		</tr>
+		<tr class="row" ng-show="!vm.list.length">
+			<td colspan="6">No comics listed. Get started by adding your comics library path in Settings.</td>
+		</tr>
+		
+		<tbody ng-repeat="item in vm.list track by item._id">
+		<tr class="row row-clickable bg-dark"
+			ng-click="item.beingEdited?vm.cancelEdit(item):vm.editItem(item); currentTpl='/editItems.html'" 
+			ng-class="{changed:item.changed}">
+			<td class="img-box">
+				<div class="img-mask" ng-class="{imgloaded:item.coverthumb}">
+					<img class="tmb-cover" src="img/not_found.jpg" alt="{{item.name}} cover"
+						ng-src="{{item.coverthumb}}" ng-show="item.coverthumb">
+					<div class="img-mask-overlay">
+						<span class="tmb-loader fa-stack fa-lg" ng-show="!item.coverthumb">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-circle-o-notch fa-spin fa-stack-1x fa-inverse"></i>
+						</span>
+					</div>
+				</div>
+			</td>
+			<th>
+				<h3 ng-bind="item.name"></h3>
+				<a class="enable-tooltip ext" href="{{item.comicpage}}" title="latest comic" target="_blank" 
+					data-toggle="tooltip" data-placement="right">{{item.comicpage}}
+						<i class="fa fa-sm fa-external-link"></i></a>
+			</th>
+			<td ng-bind="item.dateadded">-</td>
+			<td class="text-right">
+				<i class="enable-tooltip fa fa-lg" title="" 
+					ng-class="item.runstatusicon" data-toggle="tooltip" data-placement="top" data-original-title="{{item.runstatusmsg}}"></i>
+			</td>
+			<td ng-bind="item.lastupdated">-</td>
+			<td class="fixw-80 text-right">
+				<button class="btn btn-xs enable-tooltip" 
+					data-toggle="tooltip" data-placement="top" title="edit this"
+					ng-click="vm.editItem(item); currentTpl='/editItems.html'" id="tpl-link"><i class="fa fa-fw fa-lg fa-pencil"></i></button>
+				<button class="btn btn-xs btn-danger enable-tooltip" 
+					data-toggle="tooltip" data-placement="top" title="delete this"
+					ng-click="vm.removeItem(item)"><i class="fa fa-fw fa-lg fa-times"></i></button>
+			</td>
+		</tr>
+		<tr class="row editbox-row collapse-row" ng-class="{active:item.beingEdited}">
+			<td colspan="6">
+				<div class="form-wrap dynamic-wrap">
+					<div ng-include src="item.editTemplate">this should not be visible</div>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+		
+		<tr class="row tfoot">
+			<td colspan="6" class="btn-row stat-row bottom-brdr">
+				<div class="stat-msg-wrap">
+					<div class="fetch-msg" ng-class="{shownfade:vm.savestatustxt.length>0}">
+						<span>{{ vm.savestatustxt }}</span>
+						<i class="fa" ng-class="vm.savestatusicon"></i>
+					</div>
+				</div>	
+				
+				<div class="btn-row text-right">
+						<button type="submit" class="btn btn-primary"
+							ng-click="vm.saveList()"
+							ng-disabled="!vm.changed">Save list</button>
+						<button type="button" class="btn"
+							ng-click="vm.discardChange()"
+							ng-disabled="!vm.changed">Discard changes</button>
+						<button type="button" class="btn enable-tooltip"
+							data-toggle="tooltip" data-placement="top" title="run Squirrel now"
+							ng-click="vm.runComicsFetch()"
+							ng-disabled="!vm.list.length>0">Force fetch</button>						
+					</div>
+			</td>
+		</tr>
+	</table>
+	
+		
+	<!-- template addForm - UI for new items -->
+	<script type="text/ng-template" id="/tpl_addItems.html" src="/templates/tpl_addItems.html"></script>
+	
+	<!-- template editForm - UI for editing items -->
+	<script type="text/ng-template" id="/tpl_editItems.html" src="/templates/tpl_editItems.html"></script>
+	
+</div>
