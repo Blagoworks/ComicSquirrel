@@ -3,8 +3,8 @@
   "description": "Automated image scraper for daily web comics and web comic archives. Instruct the Squirrel to download web comic images to your NAS, and you can binge-read them later, for example on your tablet",
   "version": "0.1.0",
 	"repository": {
-		"type": "",
-		"url": ""
+		"type": "git",
+		"url": "https://github.com/Blagoworks/ComicSquirrel"
   }
 	"private": true,
   "keywords": [
@@ -21,12 +21,13 @@
   },
   "author": {
     "name": "Hanneke Hoogstrate",
-    "email": "hanneke@blagoworks.nl",
+    "email": "info@blagoworks.nl",
 		"company": "Blagoworks",
     "url": "http://blagoworks.nl"
   },
   "license": "BSD-2-Clause",
   "dependencies": {
+		"angular-ui-bootstrap": "~1.0.3",
 		"serve-static": "~1.9.1",
     "express": "~4.11.2",
 		"request": "~2.53.0",

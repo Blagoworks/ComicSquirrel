@@ -12,16 +12,15 @@ var utils		= require("./utilities");
 
 
 //internal vars
-var testRun = false;
-var dataObj = [];
-var doneCount 	= 0;
-var dataFile 	= apppaths.dataFile["comicsdata"];
-var statusClassArr = { "ok":"fa-check-circle", "waiting":"fa-clock-o", "error":"fa-times-circle" };
+var sq = [];	//squirrel var obj
+//statics
+sq.dataFile 	= apppaths.dataFile["comicsdata"];
+sq.statusClassArr = { "ok":"fa-check-circle", "waiting":"fa-clock-o", "error":"fa-times-circle" };
 
 initSqVars = function(){
-	testRun = false;
-	dataObj = [];
-	doneCount 	= 0;
+	sq.testRun = false;
+	sq.dataObj = [];
+	sq.doneCount 	= 0;
 }
 //event emitter
 var eventEmitter = require("events").EventEmitter;
@@ -37,7 +36,7 @@ initSqEvtEmitter = function(){
 
 getJsonDataFile = function(fileUrl, callback){
 	//callback => readDataForEach
-	doneCount = 0;
+	sq.doneCount = 0;
 	var file = fileUrl;
 	var err = "";
 
@@ -53,7 +52,7 @@ getJsonDataFile = function(fileUrl, callback){
 				err = "cannot read datafile, err: " + error.message;
 				return callback(err);
 			}else{
-				dataObj = data;
+				sq.dataObj = data;
 				return callback(null, data);
 			}
 		});
@@ -61,7 +60,7 @@ getJsonDataFile = function(fileUrl, callback){
 };
 
 //for each comic in comicObject, find the image to download
-readDataForEach = function(err,obj){
+readDataForEach = function(err, obj){
 	if(!err){
 		if(obj.comics){
 		var comics = obj.comics;
@@ -142,11 +141,11 @@ getComicById = function(comicId, comicDir, pageUrl, baseUrl, imgEl) {
 
 //download the scraped img to the designated folder
 // callbacks in imgDownloader.saveImg
-onError = function(nr,dl,msg){
+onError = function(nr, dl, msg){
 	console.log("onError, error on nr: "+nr+", msg: "+msg);
 	comicDone(nr, "error", msg);
 };
-onSuccess = function(nr,name,dir){
+onSuccess = function(nr, name, dir){
 	console.log("onSuccess, count: "+nr+", name: "+name+", dir: "+dir);
 	onSavedImage(nr, name, dir);
 };
@@ -158,18 +157,18 @@ onSavedImage = function(comicId, imgName, comicDir){
 
 //collect and update results per comic
 updateDataForComic = function(id, status, msg){
-	if(!testRun){
+	if(!sq.testRun){
 		var lastupdated = utils.formatDateStr( new Date() ); 	
-		var comics = dataObj.comics;	
+		var comics = sq.dataObj.comics;	
 		for(var i=0; i<comics.length; i++){
 			if(id == comics[i]._id){
-				comics[i].runstatusicon = statusClassArr[status];
+				comics[i].runstatusicon = sq.statusClassArr[status];
 				comics[i].runstatusmsg = msg;
 				if (msg != "no new image yet"){ comics[i].lastupdated = lastupdated; }
 						
 				//log results for each image downloaded, with the name of the comics for clarity
 				var comicName = comics[i].name; 
-				var testStr = (testRun)? "testing, " : "";
+				var testStr = (sq.testRun)? "testing, " : "";
 				logwriter.logResults( testStr + comicName +" img " +status+ ": " +msg);
 			}	
 		}	
@@ -184,25 +183,25 @@ comicDone = function(id, status, msg){
 	if(id!="onDataFileError"){ updateDataForComic(id, status, msg); }
 	
 	//emit events
-	if(testRun && status=="error"){ 
+	if(sq.testRun && status=="error"){ 
 		squirrelEvt.emit("TESTRUN_ERROR", msg); 
-	}else if(testRun){ 
+	}else if(sq.testRun){ 
 		squirrelEvt.emit("TESTRUN_DONE"); 
 	}else{
-		var total = dataObj.comics.length;	
+		var total = sq.dataObj.comics.length;	
 		if(id!="onDataFileError"){
-			doneCount += 1;  	//doneCount starts at 0
+			sq.doneCount += 1;  	//doneCount starts at 0
 		}else{
-			dataObj.cronstatus = "error";
-			doneCount = total;
+			sq.dataObj.cronstatus = "error";
+			sq.doneCount = total;
 			squirrelEvt.emit("SQUIRREL_ERROR");
 		}
-		//console.log("comicDone for id: "+id+", doneCount: "+doneCount+" of total: "+total);
+		//console.log("comicDone for id: "+id+", doneCount: "+sq.doneCount+" of total: "+total);
 	
 		//write datafile when done with the list
-		if(doneCount == total && !testRun){
+		if(sq.doneCount == total && !sq.testRun){
 			//write dataObj back to file
-			jsonwriter.writeDataFile(dataObj, dataFile, function(){ 
+			jsonwriter.writeDataFile(sq.dataObj, sq.dataFile, function(){ 
 				squirrelEvt.emit("SQUIRREL_DONE");
 				console.log("DONE - Squirrel wrote datafile back to disk");
 			});
@@ -216,7 +215,7 @@ testFetch = function(obj, callback){
 	initSqVars();
 	initSqEvtEmitter();
 	
-	testRun = true;
+	sq.testRun = true;
 	var id = "testitem";
 	var name = obj.name;
 	var page = obj.comicpage;
@@ -251,7 +250,7 @@ fetchNow = function(callback){
 	
 	try{
 		console.log("Squirrel fetchNow started - getting comics");
-		getJsonDataFile(dataFile, readDataForEach);
+		getJsonDataFile(sq.dataFile, readDataForEach);
 		
 		squirrelEvt.on("SQUIRREL_DONE", function() {
 			logwriter.logResults("--- update ---", " " );
@@ -275,5 +274,5 @@ exports.fetchNow = fetchNow;
 //test:   node /volume1/development/ComicSquirrel/app/squirrel.js
 initSqVars();
 initSqEvtEmitter();
-getJsonDataFile(dataFile, readDataForEach);
+getJsonDataFile(sq.dataFile, readDataForEach);
 */
