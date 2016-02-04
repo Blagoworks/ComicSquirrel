@@ -19,7 +19,7 @@ angular.module("HeadCtrl", []).controller("HeadController", [
 		dataService.getCronJob().then( function(response){
 			//console.log("onstart, headctl getCronJob, response: "+response.data.status+", timetorun: "+response.data.timetorun );	
 			if(response.data.timetorun){
-				timetorun = response.data.timetorun;
+				timetorun = response.data.timetorun; //cronTimeStr
 				cronstatus = "ok";
 			}else{
 				//start cron with saved timetorun time
@@ -68,8 +68,6 @@ angular.module("HeadCtrl", []).controller("HeadController", [
 	$scope.vm = vm;
 	
 	vm.showAppStatus();
-	
-	//gekke geit
-	$scope.tagline = "To infinity and beyond!";	
+		
 }]);
 

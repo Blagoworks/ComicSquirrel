@@ -24,6 +24,7 @@ try {
 	console.log("CRON pattern not valid!");
 };
 
+/* callback from onTick -> squirrel.fetchNow */
 onSquirrelDone = function(err,data){
 	if(err){
 		console.log("after cron tick, error from squirrel: "+err);
@@ -33,16 +34,7 @@ onSquirrelDone = function(err,data){
 };
 
 
-/* -- start at app start --*/
-startCronJob = function(){
-	job.start();	
-	cronRunning = true;
-	console.log("CRON job started - waiting for TICK");
-}
-exports.startCronJob = startCronJob;
-
-
-/* --- on load index.html --- */
+/* --- on load html frontend: HeadCtrl --- */
 getCronStatus = function(callback){
 	try{
 		if(!cronRunning) throw new Error("cron-mgr: cronRunning is false");
@@ -59,7 +51,10 @@ exports.getCronStatus = getCronStatus;
 setTimeToRun = function(timestr, callback){
 	//console.log("called cron to set new time");
 	cronTimeStr = timestr;
-	if(cronRunning) job.stop();
+	if(cronRunning){
+		cronRunning = false;
+		job.stop();
+	}
 	
 	try{
 		var objRegExp = /(\d+):(\d+)/;
@@ -73,6 +68,7 @@ setTimeToRun = function(timestr, callback){
 	
 	job.cronTime = new CronTime(cronPattern);
 	job.start();
+	cronRunning = true;
 	
 	var startDate = utils.formatDateStr( new Date() );
 	console.log("["+startDate+"] started cron job, runs on "+cronTimeStr+", pattern: "+job.cronTime);	

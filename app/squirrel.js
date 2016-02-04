@@ -162,6 +162,7 @@ updateDataForComic = function(id, status, msg){
 		var comics = sq.dataObj.comics;	
 		for(var i=0; i<comics.length; i++){
 			if(id == comics[i]._id){
+				//console.log("updateDataForComic for id: "+id+", name: "+comics[i].name);
 				comics[i].runstatusicon = sq.statusClassArr[status];
 				comics[i].runstatusmsg = msg;
 				if (msg != "no new image yet"){ comics[i].lastupdated = lastupdated; }
@@ -169,7 +170,8 @@ updateDataForComic = function(id, status, msg){
 				//log results for each image downloaded, with the name of the comics for clarity
 				var comicName = comics[i].name; 
 				var testStr = (sq.testRun)? "testing, " : "";
-				logwriter.logResults( testStr + comicName +" img " +status+ ": " +msg);
+				var logMsg = testStr + comicName +" img " +status+ ": " +msg;
+				logwriter.logResults( logMsg );
 			}	
 		}	
 	}
@@ -178,7 +180,7 @@ updateDataForComic = function(id, status, msg){
 
 //finally, save to datafile
 comicDone = function(id, status, msg){
-	
+	console.log("comicDone for id: "+id);
 	//set lastupdated var in comics data obj
 	if(id!="onDataFileError"){ updateDataForComic(id, status, msg); }
 	
@@ -196,14 +198,12 @@ comicDone = function(id, status, msg){
 			sq.doneCount = total;
 			squirrelEvt.emit("SQUIRREL_ERROR");
 		}
-		//console.log("comicDone for id: "+id+", doneCount: "+sq.doneCount+" of total: "+total);
-	
 		//write datafile when done with the list
 		if(sq.doneCount == total && !sq.testRun){
 			//write dataObj back to file
 			jsonwriter.writeDataFile(sq.dataObj, sq.dataFile, function(){ 
 				squirrelEvt.emit("SQUIRREL_DONE");
-				console.log("DONE - Squirrel wrote datafile back to disk");
+				console.log("DONE on "+sq.doneCount+" - Squirrel wrote datafile back to disk");
 			});
 		}
 	}
@@ -270,7 +270,7 @@ fetchNow = function(callback){
 exports.fetchNow = fetchNow;
 
 
-/*
+/* 
 //test:   node /volume1/development/ComicSquirrel/app/squirrel.js
 initSqVars();
 initSqEvtEmitter();
