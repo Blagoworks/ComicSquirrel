@@ -2,31 +2,5 @@
     "port": 3030,
     "timetorun": "12:14",
     "downloaddir": "/volume1/Media/Comics/",
-    "comics": [
-        {
-            "_id": "6ef1b98c-42ff-4785-9453-d316040b575b",
-            "name": "Stand Still Stay Silent",
-            "comicpage": "http://sssscomic.com/comic.php",
-            "imgdir": "http://sssscomic.com/comicpages/",
-            "imgselector": "#wrapper2 .comicnormal",
-            "dateadded": "03-02-2015 12:28",
-            "runstatusicon": "fa-check-circle",
-            "coverthumb": "img/cache/standstillstaysilent.jpg",
-            "runstatusmsg": "saved image",
-            "lastupdated": "04-07-2015 12:14"
-        },
-        {
-            "_id": "0f40b96b-ed2c-4e58-acc6-93de7163f05d",
-            "name": "Girl Genius/Act 2 vol 02",
-            "comicpage": "http://www.girlgeniusonline.com/comic.php",
-            "imgdir": "http://www.girlgeniusonline.com/ggmain/strips/",
-            "imgselector": "#comicbody > img",
-            "dateadded": "03-01-2015 19:29",
-            "runstatusicon": "fa-check-circle",
-            "coverthumb": "img/cache/girlgenius.jpg",
-            "runstatusmsg": "saved image",
-            "lastupdated": "04-07-2015 12:14"
-        }
-    ],
-    "cronstatus": "ok"
+    "comics": []
 }
