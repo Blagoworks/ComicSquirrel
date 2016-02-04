@@ -1,0 +1,4 @@
+# don't overwrite empty data file with test data
+
+comicdata.json
+comicdata_initial.json
