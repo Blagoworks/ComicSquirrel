@@ -1,19 +1,33 @@
+02-06-2016 16:35 --- update ---
+02-04-2016 15:52	 Girl Genius/Act 2 vol 03 img waiting: no new image yet
+02-04-2016 15:52	 Lackadaisy Cats img waiting: no new image yet
+02-04-2016 15:52	 Stand Still Stay Silent img waiting: no new image yet
+02-04-2016 15:36 --- update ---
+02-04-2016 15:31	 Girl Genius/Act 2 vol 03 img waiting: no new image yet
+02-04-2016 15:31	 Lackadaisy Cats img waiting: no new image yet
+02-04-2016 15:00 --- update ---
+02-04-2016 15:00	 Stand Still Stay Silent img ok: saved image
+02-04-2016 15:00	 Lackadaisy Cats img waiting: no new image yet
+02-03-2016 12:15 --- update ---
+02-03-2016 12:15	 Stand Still Stay Silent img ok: saved image
+02-03-2016 12:15	 Girl Genius/Act 2 vol 03 img ok: saved image
+02-03-2016 12:15	 Lackadaisy Cats img waiting: no new image yet
 02-02-2016 12:22 --- update ---
-02-02-2016 12:22	 gotStand Still Stay Silent img ok: saved image
-02-02-2016 12:22	 gotGirl Genius/Act 2 vol 02 img ok: saved image
-02-02-2016 12:22	 gotLackadaisy Cats img waiting: no new image yet
+02-02-2016 12:22	 Stand Still Stay Silent img ok: saved image
+02-02-2016 12:22	 Girl Genius/Act 2 vol 02 img ok: saved image
+02-02-2016 12:22	 Lackadaisy Cats img waiting: no new image yet
 01-28-2016 13:36 --- update ---
-01-28-2016 13:36	 gotStand Still Stay Silent img ok: saved image
-01-28-2016 13:36	 gotLackadaisy Cats img waiting: no new image yet
-01-28-2016 13:36	 gotGirl Genius/Act 2 vol 02 img waiting: no new image yet
+01-28-2016 13:36	 Stand Still Stay Silent img ok: saved image
+01-28-2016 13:36	 Lackadaisy Cats img waiting: no new image yet
+01-28-2016 13:36	 Girl Genius/Act 2 vol 02 img waiting: no new image yet
 01-27-2016 12:14 --- update ---
-01-27-2016 12:14	 gotStand Still Stay Silent img ok: saved image
-01-27-2016 12:14	 gotGirl Genius/Act 2 vol 02 img ok: saved image
-01-27-2016 12:14	 gotLackadaisy Cats img waiting: no new image yet
+01-27-2016 12:14	 Stand Still Stay Silent img ok: saved image
+01-27-2016 12:14	 Girl Genius/Act 2 vol 02 img ok: saved image
+01-27-2016 12:14	 Lackadaisy Cats img waiting: no new image yet
 01-26-2016 14:44 --- update ---
-01-26-2016 19:34	 gotLackadaisy Cats img waiting: no new image yet
-01-26-2016 19:34	 gotGirl Genius/Act 2 vol 02 img waiting: no new image yet
-01-26-2016 19:34	 gotStand Still Stay Silent img waiting: no new image yet
+01-26-2016 19:34	 Lackadaisy Cats img waiting: no new image yet
+01-26-2016 19:34	 Girl Genius/Act 2 vol 02 img waiting: no new image yet
+01-26-2016 19:34	 Stand Still Stay Silent img waiting: no new image yet
 01-26-2016 14:44 --- update ---
 01-26-2016 14:44	 file 1453276767.jpg aleady downloaded
 01-26-2016 14:44	 saved 458.jpg to: /volume1/Media/Comics/Stand Still Stay Silent

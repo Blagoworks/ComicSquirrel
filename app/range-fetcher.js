@@ -40,7 +40,14 @@ initRange = function(obj){
 	//get incoming vars parsed into static obj
 	var slash 	= (obj.downloaddir.slice(-1)=="/")? "" : "/"; 	//check for slash
 	rf.obj.dldir 	= obj.downloaddir + slash + obj.name;
-	
+	//only for archive list
+	rf.obj.linksel = obj.linkselector;
+	if(obj.linkselector != undefined){
+		//pseudo-code - testing
+		rf.doneArr[0] = true;
+		fetchComplete(1,1, "fetcher got a linkselector"); 
+		return;
+	}
 	//only for archive pages:
 	rf.obj.imgdir = obj.imgdir;
 	rf.obj.imgsel = obj.imgselector;

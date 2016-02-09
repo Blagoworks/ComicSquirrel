@@ -1,6 +1,44 @@
 {
     "port": 3030,
-    "timetorun": "12:14",
+    "timetorun": "12:15",
     "downloaddir": "/volume1/Media/Comics/",
-    "comics": []
+    "comics": [
+        {
+            "_id": "ce4af66b-ee04-4c09-a45f-f7f2387f5c3b",
+            "name": "Lackadaisy Cats",
+            "comicpage": "http://lackadaisycats.com/comic.php",
+            "imgdir": "http://www.lackadaisycats.com/comic/",
+            "imgselector": "#content > img",
+            "dateadded": "05-16-2015 14:17",
+            "runstatusicon": "fa-clock-o",
+            "coverthumb": "img/cache/lackadaisycats.jpg",
+            "runstatusmsg": "no new image yet",
+            "lastupdated": "02-08-2016 17:07"
+        },
+        {
+            "_id": "6ef1b98c-42ff-4785-9453-d316040b575b",
+            "name": "Stand Still Stay Silent",
+            "comicpage": "http://www.sssscomic.com/comic.php",
+            "imgdir": "http://www.sssscomic.com/comicpages/",
+            "imgselector": "#wrapper2 .comicnormal",
+            "dateadded": "03-02-2015 12:28",
+            "runstatusicon": "fa-check-circle",
+            "coverthumb": "img/cache/standstillstaysilent.jpg",
+            "runstatusmsg": "saved image",
+            "lastupdated": "02-08-2016 17:07"
+        },
+        {
+            "_id": "0f40b96b-ed2c-4e58-acc6-93de7163f05d",
+            "name": "Girl Genius/Act 2 vol 03",
+            "comicpage": "http://www.girlgeniusonline.com/comic.php",
+            "imgdir": "http://www.girlgeniusonline.com/ggmain/strips/",
+            "imgselector": "img[alt='Comic']",
+            "dateadded": "03-01-2015 19:29",
+            "runstatusicon": "fa-clock-o",
+            "coverthumb": "img/cache/girlgenius.jpg",
+            "runstatusmsg": "no new image yet",
+            "lastupdated": "02-08-2016 17:07"
+        }
+    ],
+    "cronstatus": "ok"
 }

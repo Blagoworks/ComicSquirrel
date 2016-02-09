@@ -78,10 +78,11 @@ exports.setTimeToRun = setTimeToRun;
 
 
 //testing
-/*
+/* 
+// test:  node /volume1/development/ComicSquirrel/app/cron-manager.js
 report = function(err,str){
 	console.log("report: cron job set at "+str+", err: "+err );
 }
-setTimeToRun("13:58",report);
+setTimeToRun("10:31",report);
 */
 
