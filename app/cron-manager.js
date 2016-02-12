@@ -15,7 +15,7 @@ try {
 	var job = new CronJob({
 		cronTime: cronPattern,
 		onTick: function() {
-			console.log("==== CRON TICK ====");
+			console.log("==== CRON TICK on "+ thisTickDate() +" ====");
 			squirrel.fetchNow(onSquirrelDone);
 		},
 		start: false
@@ -31,6 +31,11 @@ onSquirrelDone = function(err,data){
 	}else{
 		console.log("after cron tick, success from squirrel: "+data);
 	}
+};
+
+thisTickDate = function(){
+	var tickDate = utils.formatDateStr( new Date() );
+	return tickDate;
 };
 
 
