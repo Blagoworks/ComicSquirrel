@@ -6,33 +6,62 @@
 	
 	<ul id="tabs" class="nav nav-tabs" role="tablist">
 		<li role="presentation" class="active">
+			<a href="#box-archive-list" aria-controls="box-archive-list" role="tab" data-toggle="tab" 
+				ng-click="vm.setActiveTab('archiveform')">From archive list</a></li>
+		<li role="presentation">
 			<a href="#box-archive-page" aria-controls="box-archive-page" role="tab" data-toggle="tab" 
-				ng-click="vm.resetForm('tab2form')">By archive page</a></li>
+				ng-click="vm.setActiveTab('mainform')">By page url</a></li>		
 		<li role="presentation">
 			<a href="#box-archive-url" aria-controls="box-archive-url" role="tab" data-toggle="tab"
-				ng-click="vm.resetForm('mainform')">Directly from img url</a></li>
+				ng-click="vm.setActiveTab('tab2form')">By img url</a></li>
 	</ul>
 	
 	
 	<div class="tab-content">
-		
-			<!-- first tab - Get all images from archived comics pages -->
-			<div id="box-archive-page" role="tabpanel" class="form-wrap tab-pane fade in active">	
-				<form name="mainform" id="mainform" class="form-horizontal" role="form" novalidate>
+
+			<!-- first tab - Get all images from a list of links on a comics archive page -->
+			<div id="box-archive-list" role="tabpanel" class="form-wrap tab-pane fade in active">	
+				<form name="archiveform" id="archiveform" class="form-horizontal" role="form" novalidate>
 				
-					<div ng-include src="'/templates/tpl_archivedItems_page.html'">template content for first tab</div>
+					<div ng-include src="'/templates/tpl_archivedItems_list.html'">template content for first tab</div>
 					
 					<div class="btn-row stat-row bottom-brdr">
-						<div class="stat-msg-wrap" ng-class="vm.fetchstatus">					
+						<div class="stat-msg-wrap" ng-class="styles.fetchstatus">					
 							<div ng-include src="'/templates/tpl_statusmsgs.html'">status msgs</div>
 						</div>
 						
 						<div class="btn-row text-right">
 							<button type="button" class="btn"
 								ng-click="vm.fetchArchiveds(archiveFormData,'testrun')"
-								ng-disabled="!mainform.$dirty || mainform.$invalid">Test</button>
+								ng-disabled="!archiveform.$dirty || archiveform.$invalid">Test</button>
 							<button type="submit" class="btn btn-primary"
 								ng-click="vm.fetchArchiveds(archiveFormData,'full')"
+								ng-disabled="!archiveform.$dirty || archiveform.$invalid">Fetch</button>
+							<button type="button" class="btn"
+								ng-disabled="!archiveform.$dirty"
+								ng-click="vm.resetForm('archiveform');">Clear form</button>
+						</div>	
+					</div>
+				</form>
+			</div>
+			
+			<!-- second tab - Get all images from a range of archived comics pages -->
+			<div id="box-archive-page" role="tabpanel" class="form-wrap tab-pane fade">	
+				<form name="mainform" id="mainform" class="form-horizontal" role="form" novalidate>
+				
+					<div ng-include src="'/templates/tpl_archivedItems_page.html'">template content for second tab</div>
+					
+					<div class="btn-row stat-row bottom-brdr">
+						<div class="stat-msg-wrap" ng-class="styles.fetchstatus">					
+							<div ng-include src="'/templates/tpl_statusmsgs.html'">status msgs</div>
+						</div>
+						
+						<div class="btn-row text-right">
+							<button type="button" class="btn"
+								ng-click="vm.fetchArchiveds(pageFormData,'testrun')"
+								ng-disabled="!mainform.$dirty || mainform.$invalid">Test</button>
+							<button type="submit" class="btn btn-primary"
+								ng-click="vm.fetchArchiveds(pageFormData,'full')"
 								ng-disabled="!mainform.$dirty || mainform.$invalid">Fetch</button>
 							<button type="button" class="btn"
 								ng-disabled="!mainform.$dirty"
@@ -40,17 +69,16 @@
 						</div>	
 					</div>
 				</form>
-			</div>
-		
+			</div>		
 		
 			<!-- second tab - get images from an image url -->
 			<div id="box-archive-url" role="tabpanel" class="form-wrap tab-pane fade">	
 				<form name="tab2form" class="form-horizontal" role="form" novalidate>
 
-					<div ng-include src="'/templates/tpl_archivedItems_img.html'">template content for second tab</div>
+					<div ng-include src="'/templates/tpl_archivedItems_img.html'">template content for third tab</div>
 
 						<div class="btn-row stat-row bottom-brdr">
-							<div class="stat-msg-wrap" ng-class="vm.fetchstatus">
+							<div class="stat-msg-wrap" ng-class="styles.fetchstatus">
 								<div ng-include src="'/templates/tpl_statusmsgs.html'">status msgs</div>
 							</div>
 							

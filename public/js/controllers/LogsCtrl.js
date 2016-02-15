@@ -13,7 +13,7 @@ angular.module("LogsCtrl", []).controller("LogsController", [
 			vm.logtext = response.data.items;
 		}else{
 			var msg = "No response from server: no network, or no node.js";
-			messageService.displayAppError($scope.$parent.vm, msg);
+			messageService.displayAppError($scope.$parent, msg);
 		}
 	});
 	
@@ -25,7 +25,7 @@ angular.module("LogsCtrl", []).controller("LogsController", [
 				vm.logtext = response.data.items;
 			}else{
 				var msg = "No response from server: no network, or no node.js";
-				messageService.displayAppError($scope.$parent.vm, msg);
+				messageService.displayAppError($scope.$parent, msg);
 			}
 		});
 	};

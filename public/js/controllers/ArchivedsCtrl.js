@@ -3,13 +3,26 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 	
 
 	var vm = {};
+	var styles = {};
 
 	//set icon class by this arr[key] to manage icons in one place
 	vm.statusclass = messageService.getStatusClassArr();
 	vm.fetchTestResult = false;
+	vm.formIdArr = ["archiveform","mainform","tab2form"];
+	
 	
 	//copy initial form state to reset form
 	var archiveFormData = {
+		name: "",
+		firstUrl: "",
+		linkselector: "",
+		selector: "",
+		sourceDir: "",
+		method: "number",		
+		minRange: "",
+		maxRange: ""
+	};
+	var pageFormData = {
 		name: "",
 		firstUrl: "",
 		sourceDir: "",
@@ -34,6 +47,7 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 		maxDate: ""
 	};
 	var emptyArchiveFormData = angular.copy(archiveFormData);
+	var emptyPageFormData = angular.copy(pageFormData);
 	var emptyImgFormData = angular.copy(imgFormData);
 		
 	
@@ -111,7 +125,7 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 		vm.fetchingError = vm.fetchingDone = false;
 		//show fetch msg
 		vm.fetchingInProgress = true;
-		vm.fetchstatus = "fetching";
+		styles.fetchstatus = "fetching";
 		
 		vm.fetchEvents = new EventSource("/fetchservice/events");
 		
@@ -132,7 +146,7 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 	vm.stopEventListening = function(){
 		//hide fetch msg
 		vm.fetchingInProgress = false;
-		vm.fetchstatus = "";
+		styles.fetchstatus = "";
 		//remove listeners
 		if(vm.fetchEvents){
 			vm.fetchEvents.removeEventListener("FETCH_INITED", vm.onFetchInited, false);
@@ -151,7 +165,7 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 
 	//---on userclick Fetch btn:
 	vm.fetchArchiveds = function(formDataObj,runtype){
-		//formDataObj: archiveFormData || imgFormData / runtype: "testrun" || "full"
+		//formDataObj: archiveFormData || pageFormData || imgFormData / runtype: "testrun" || "full"
 		//console.log("fetchArchiveds started for "+formDataObj.name+", type: "+runtype);
 		vm.countchanged = true;
 		vm.oldcount = vm.newcount;
@@ -167,9 +181,10 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 			comicpage: formDataObj.firstUrl,
 			method: formDataObj.method
 			};
-		//fill only for archiveFormData:
-		archvObj.imgdir = (formDataObj.sourceDir)? formDataObj.sourceDir : "";
+		//fill archvObj:
+		archvObj.linkselector = (formDataObj.linkselector)? formDataObj.linkselector : "";		
 		archvObj.imgselector = (formDataObj.selector)? formDataObj.selector : "";
+		archvObj.imgdir = (formDataObj.sourceDir)? formDataObj.sourceDir : "";
 		//set test-flag
 		if(runtype=="testrun") archvObj.testrun = true;	
 		console.log("archivedsCtrl, runtype: "+runtype+", imgdir: "+archvObj.imgdir);
@@ -198,9 +213,9 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 				//console.log("--there is data");
 				if(!response.data.result){
 					console.log("-- --there is no result");
-					vm.fetchstatusicon = vm.statusclass["error"];
+					styles.fetchstatusicon = vm.statusclass["error"];
 					vm.fetchingError = true;
-					vm.fetchstatus = "error";
+					styles.fetchstatus = "error";
 					vm.errormsg = response.data.status; //Range fetch error, Cannot read property '0' of null
 				}else{
 					console.log("-- --there is a result obj, keys: "+Object.keys(response.data));
@@ -214,8 +229,8 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 					vm.imgstr 	= (resObj.nr!=1)? " images" : " image";
 					vm.dlcount 	= resObj.nr;
 					
-					vm.fetchstatusicon = (!vm.errormsg)? vm.statusclass["check"] : vm.statusclass["error"];
-					vm.fetchstatus = (!vm.errormsg)? "success" : "error";
+					styles.fetchstatusicon = (!vm.errormsg)? vm.statusclass["check"] : vm.statusclass["error"];
+					styles.fetchstatus = (!vm.errormsg)? "success" : "error";
 					vm.fetchingDone = true;
 					console.log("fetchArchiveds end result, status: "+response.data.status+", dlcount: "+resObj.nr);
 				}
@@ -224,28 +239,37 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 		});
 	};
 	
-
-	//reset ng validation values
+	
+	vm.setActiveTab = function(formId){
+		for(var i=0; i<vm.formIdArr; i++){		
+			if(formId!=vm.formIdArr[i]) {
+				vm.resetForm( vm.formIdArr[i] );
+			}
+		}
+	};
+	//on Clear Form, reset ng validation values
 	vm.resetForm = function(formId){
 		//reset
 		archiveFormData = angular.copy(emptyArchiveFormData);
+		pageFormData = angular.copy(emptyPageFormData);
 		imgFormData = angular.copy(emptyImgFormData);
 		//bind to view
 		$scope.archiveFormData = archiveFormData;
+		$scope.pageFormData = pageFormData;
 		$scope.imgFormData = imgFormData;
 
-		vm.resetActiveClassnames();
+		vm.resetMethodBtnClass();
 		
 		//restore initial validation
 		$scope[formId].$setUntouched();		
 		$scope[formId].$setPristine();
 		
 		//reset msgs
-		vm.fetchstatus = "";
+		styles.fetchstatus = "";
 		vm.fetchingInProgress = vm.fetchingError = vm.fetchingDone = false;
 	};
-	//set first btn class to active after switching tabs or clearing form
-	vm.resetActiveClassnames = function(){
+	//set first toggle btn class to active after switching tabs or clearing form
+	vm.resetMethodBtnClass = function(){
 		//= bootstrap btn-toggle override 
 		var activeBtn = $("#methodToggle").find('.active');
 		var firstBtn = $("#methodToggle").find('label').filter(':first');
@@ -260,16 +284,16 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 	
 	//toggle date or number method UI visible
 	vm.updateMethodToggle = function(model,method){
-		if(model=="archiveFormData"){
+		if(model=="pageFormData"){
 			//needs $scope to properly update view!
-			$scope.archiveFormData.method = method;
+			$scope.pageFormData.method = method;
 		}else if(model=="imgFormData"){
 			$scope.imgFormData.method = method;
 		}
 		//console.log("updating method toggle for "+model+" to active method: "+method);		
 	};
 	//set initial active
-	archiveFormData.method=="number";
+	//pageFormData.method=="number";
 
 	
 	/*with angular, bootstrap tabs need initing*/
@@ -330,7 +354,9 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 	
 	//expose objects to html scope
 	$scope.archiveFormData = archiveFormData;
+	$scope.pageFormData = pageFormData;
 	$scope.imgFormData = imgFormData;
+	$scope.styles = styles;
 	$scope.vm = vm;
 
 }]);

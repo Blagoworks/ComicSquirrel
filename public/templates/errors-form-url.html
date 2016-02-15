@@ -1,3 +1,7 @@
+<div class="error-msg" ng-show="archiveform.pageurl.$dirty && archiveform.pageurl.$invalid">
+	<small class="error" ng-show="archiveform.pageurl.$error.url || archiveform.pageurl.$invalid">Please fill in a valid url</small>
+</div>
+
 <div class="error-msg" ng-show="mainform.pageurl.$dirty && mainform.pageurl.$invalid">
 	<small class="error" ng-show="mainform.pageurl.$error.url || mainform.pageurl.$invalid">Please fill in a valid url</small>
 </div>

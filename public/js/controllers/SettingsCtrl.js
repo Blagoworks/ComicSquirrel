@@ -3,6 +3,8 @@ angular.module("SettingsCtrl", []).controller("SettingsController", [
 	
 	
 	var vm = {};
+	var styles = {};
+	
 	vm.savestatustxt = "";
 	vm.statusclass = messageService.getStatusClassArr(); 
 	var newDLdir = false, newCronjob = false, newPort = false;
@@ -60,9 +62,10 @@ angular.module("SettingsCtrl", []).controller("SettingsController", [
 		else dataService.dataObj.cronstatus = "error"; 
 		
 		//set status msg in scope of HeadController (parent of view)
-		var statusObj = messageService.updateStatus($scope.$parent.vm, dataService.dataObj.timetorun, dataService.dataObj.cronstatus);	
-		vm.savestatustxt = response.data.status + ", ";	
-
+		var statusObj = messageService.updateStatus($scope.$parent, dataService.dataObj.timetorun, dataService.dataObj.cronstatus);	
+		vm.savestatustxt = response.data.status + ", ";
+		styles.savestatusicon = (response.data.timetorun)? vm.statusclass["check"] : vm.statusclass["error"];
+		
 		if(newPort) vm.setNewPort();
 		else vm.saveToDataFile();
 	};
@@ -74,12 +77,12 @@ angular.module("SettingsCtrl", []).controller("SettingsController", [
 		console.log("onPortDone, response: "+response.status ); //EADDRINUSE
 		if(response.status == 200 && response.data.status == "port change complete"){
 			vm.savestatustxt += response.data.status + ", "; //"port change complete ,"
-			vm.savestatusicon = vm.statusclass["check"]; //ok
+			styles.savestatusicon = vm.statusclass["check"]; //ok
 			vm.portChangeSuccess = true;
 			vm.saveToDataFile();
 		}else{
 			vm.savestatustxt += "port "+vm.editAppPort+" already in use, try another.";
-			vm.savestatusicon = vm.statusclass["error"];
+			styles.savestatusicon = vm.statusclass["error"];
 			vm.editAppPort = "";
 			//$scope.editAppPort.$setValidity("required",false);
 			console.log("onPortDone, port "+vm.editAppPort+" already in use!");
@@ -93,7 +96,7 @@ angular.module("SettingsCtrl", []).controller("SettingsController", [
 			$scope.settingsform.$setUntouched();
 			$scope.settingsform.$setPristine();
 			vm.savestatustxt += response.data.status; //"port change complete , data saved"
-			vm.savestatusicon = vm.statusclass["check"]; //ok
+			styles.savestatusicon = vm.statusclass["check"]; //ok
 					
 			if(vm.portChangeSuccess){
 				console.log("portChangeSuccess, starting countdown to new location");
@@ -134,6 +137,7 @@ angular.module("SettingsCtrl", []).controller("SettingsController", [
 	vm.resetStatusMsg = function(){
 		$timeout(function () {
 			vm.savestatustxt = "";
+			styles.savestatusicon = "";
 			console.log("after a 7 sec wait, reset status msg");
 		}, 7500);
 	};
@@ -149,7 +153,8 @@ angular.module("SettingsCtrl", []).controller("SettingsController", [
 	};
 
 	
-	//expose the vm using the $scope
+	//expose the vm to the $scope
+	$scope.styles = styles;
 	$scope.vm = vm;
 	
 }]);

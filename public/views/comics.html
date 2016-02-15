@@ -31,11 +31,11 @@
 			<td>last download</td>
 			<td class="text-right">manage</td>
 		</tr>
-		<tr class="row" ng-show="!vm.list.length">
+		<tr class="row" ng-show="!vm.comicsList.length">
 			<td colspan="6">No comics listed. Get started by adding your comics library path in Settings.</td>
 		</tr>
 		
-		<tbody ng-repeat="item in vm.list track by item._id">
+		<tbody ng-repeat="item in vm.comicsList track by item._id">
 		<tr class="row row-clickable bg-dark"
 			ng-click="item.beingEdited?vm.cancelEdit(item):vm.editItem(item); currentTpl='/editItems.html'" 
 			ng-class="{changed:item.changed}">
@@ -86,7 +86,7 @@
 				<div class="stat-msg-wrap">
 					<div class="fetch-msg" ng-class="{shownfade:vm.savestatustxt.length>0}">
 						<span>{{ vm.savestatustxt }}</span>
-						<i class="fa" ng-class="vm.savestatusicon"></i>
+						<i class="fa" ng-class="styles.savestatusicon"></i>
 					</div>
 				</div>	
 				
@@ -100,7 +100,7 @@
 						<button type="button" class="btn enable-tooltip"
 							data-toggle="tooltip" data-placement="top" title="run Squirrel now"
 							ng-click="vm.runComicsFetch()"
-							ng-disabled="!vm.list.length>0">Force fetch</button>						
+							ng-disabled="!vm.comicsList.length>0">Force fetch</button>						
 					</div>
 			</td>
 		</tr>

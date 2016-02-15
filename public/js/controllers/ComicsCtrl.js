@@ -5,7 +5,8 @@ ctrl.controller("ComicsController", [
 
 
 	var vm = {};
-	vm.list = [];
+	var styles = {};
+	vm.comicsList = [];
 	
 	//set icon class by this arr[key] to manage icons in one place
 	vm.statusclass = messageService.getStatusClassArr(); 
@@ -13,18 +14,18 @@ ctrl.controller("ComicsController", [
 	
 	vm.initComicData = function(){
 		vm.savestatustxt = "";
-		//fill vm.list with comicsObj via a GET call (handled in rest-router.js)
+		//fill vm.comicsList with comicsObj via a GET call (handled in rest-router.js)
 		dataService.getData().then( function(response){
 			if(response.status==200 && response.data.items){
 				console.log("comicsCtrl - on getting data, status: "+response.data.status);
 				dataService.dataObj = response.data.items;
 				if(dataService.dataObj.comics){
-					vm.list = dataService.dataObj.comics;
-					if(vm.list.length) vm.addToolTip();
+					vm.comicsList = dataService.dataObj.comics;
+					if(vm.comicsList.length) vm.addToolTip();
 				}
 			}else{
 				var msg = "No response from server: no network, or no node.js";
-				messageService.displayAppError($scope.$parent.vm, msg);
+				messageService.displayAppError($scope.$parent, msg);
 			}
 		});
 	};
@@ -58,12 +59,12 @@ ctrl.controller("ComicsController", [
 				switch(context){
 					case "editForm":
 						vm.editstatustxt = "test result: " + statusmsg;
-						vm.editstatusicon = (response.data.done)? vm.statusclass["check"] : vm.statusclass["error"];
+						styles.editstatusicon = (response.data.done)? vm.statusclass["check"] : vm.statusclass["error"];
 						setTimeout(function () { vm.editstatustxt = ""; }, 6000);
 						break;
 					case "addForm":
 						vm.addstatustxt = "test result: " + statusmsg;
-						vm.addstatusicon = (response.data.done)? vm.statusclass["check"] : vm.statusclass["error"];
+						styles.addstatusicon = (response.data.done)? vm.statusclass["check"] : vm.statusclass["error"];
 						setTimeout(function () { vm.addstatustxt = ""; }, 6000);
 						break;
 				}
@@ -75,9 +76,9 @@ ctrl.controller("ComicsController", [
 	/* --------- run squirrel manually, without cron ------------*/
 	vm.runComicsFetch = function(){
 		$scope.$parent.vm.appstatustxt = "...fetching";
-		$scope.$parent.vm.appstatusicon = vm.statusclass["loading"];
+		$scope.$parent.styles.appstatusicon = vm.statusclass["loading"];
 		vm.savestatustxt = "...fetching";
-		vm.savestatusicon = vm.statusclass["loading"];
+		styles.savestatusicon = vm.statusclass["loading"];
 		console.log("started manual fetch");
 		
 		dataService.fetchComics().then( function(response) {
@@ -87,13 +88,13 @@ ctrl.controller("ComicsController", [
 				console.log("res data: "+ response.data.done);
 				if(!response.data.done){
 					vm.savestatustxt = "Squirrel manual fetch error";
-					vm.savestatusicon = vm.statusclass["error"];
+					styles.savestatusicon = vm.statusclass["error"];
 					var msg = "Squirrel manual fetch error "+response.data.status;
-					messageService.displayAppError($scope.$parent.vm, msg);
+					messageService.displayAppError($scope.$parent, msg);
 				}else{
 					vm.savestatustxt = "Squirrel manual fetch was successful";
-					vm.savestatusicon = vm.statusclass["check"];
-					messageService.updateStatus($scope.$parent.vm, dataService.dataObj.timetorun, dataService.dataObj.cronstatus);
+					styles.savestatusicon = vm.statusclass["check"];
+					messageService.updateStatus($scope.$parent, dataService.dataObj.timetorun, dataService.dataObj.cronstatus);
 					//refresh list dl-data from server-side-saved dataObj: statusicon
 					vm.discardChange();
 				}
@@ -110,7 +111,7 @@ ctrl.controller("ComicsController", [
 		var guid = guidService.createGuid();
 		var thismoment = dataService.formatDateStr( new Date() ); 
 		//update view: show the new item as first item of the .overview list
-		vm.list.unshift({
+		vm.comicsList.unshift({
 			_id: guid,
 			name: dataService.whiteListStr(vm.newComicName),
 			comicpage: vm.newComicUrl,
@@ -133,11 +134,11 @@ ctrl.controller("ComicsController", [
 				var imgFileName = newComicName.toLowerCase().replace(/\s+/g, '') + ".jpg"; 
 				googleImgService.saveToCache(imgFileName, tmbLink).then( function(response){
 					var imgSrc = response.data.cachepath;
-					vm.list[0].coverthumb = imgSrc;
+					vm.comicsList[0].coverthumb = imgSrc;
 					console.log("== ComicsCtrl done saving img to cache: "+imgSrc+'\n');
 				});
 			}else{
-				vm.list[0].coverthumb = "img/not_found.jpg";
+				vm.comicsList[0].coverthumb = "img/not_found.jpg";
 				console.log("== img not found, googleImgServ response keys: "+Object.keys(response) );
 			}
 		});
@@ -188,9 +189,9 @@ ctrl.controller("ComicsController", [
 	//on userclick edit icon: show data in edit UI
 	vm.editItem = function(itemToEdit){
 		vm.showAddBox(false); 	//hide addForm
-		for(i=0; i<vm.list.length; i++){
-			vm.list[i].beingEdited = undefined; 
-			vm.list[i].editTemplate = undefined;
+		for(i=0; i<vm.comicsList.length; i++){
+			vm.comicsList[i].beingEdited = undefined; 
+			vm.comicsList[i].editTemplate = undefined;
 		}
 		itemToEdit.beingEdited = true;
 		//placement editpanel via ng-template, animation via css
@@ -213,16 +214,16 @@ ctrl.controller("ComicsController", [
 	//on userclick edit-done btn: update list
 	vm.updateItem = function(){
 		console.log("updating item");
-		for(var i=0; i<vm.list.length; i++){
-			if(vm.list[i].beingEdited == true){
-				vm.list[i].name = dataService.whiteListStr(vm.editComicName);
-				vm.list[i].comicpage = vm.editComicUrl;
-				vm.list[i].imgdir = vm.editComicSourceDir;
-				vm.list[i].imgselector = vm.editComicSelector;
-				vm.list[i].changed = true;
-				vm.list[i].beingEdited = undefined;
-				vm.list[i].editTemplate = undefined;
-				console.log("found the item, updated name: "+vm.list[i].name);
+		for(var i=0; i<vm.comicsList.length; i++){
+			if(vm.comicsList[i].beingEdited == true){
+				vm.comicsList[i].name = dataService.whiteListStr(vm.editComicName);
+				vm.comicsList[i].comicpage = vm.editComicUrl;
+				vm.comicsList[i].imgdir = vm.editComicSourceDir;
+				vm.comicsList[i].imgselector = vm.editComicSelector;
+				vm.comicsList[i].changed = true;
+				vm.comicsList[i].beingEdited = undefined;
+				vm.comicsList[i].editTemplate = undefined;
+				console.log("found the item, updated name: "+vm.comicsList[i].name);
 			}
 		}
 		vm.changed = true;
@@ -232,7 +233,7 @@ ctrl.controller("ComicsController", [
 	/* -----------------------DELETE item---------------------------*/
 	//on userclick delete icon: delete from .overview
 	vm.removeItem = function(itemToRemove) {
-		vm.list = vm.list.filter( function(item) { return item._id !== itemToRemove._id; });
+		vm.comicsList = vm.comicsList.filter( function(item) { return item._id !== itemToRemove._id; });
 		console.log("removing item from view: "+itemToRemove._id);
 		vm.changed = true;
 	};
@@ -242,12 +243,12 @@ ctrl.controller("ComicsController", [
 	//on userclick save via PUT
 	vm.saveList = function(){
 		vm.resetItemChanged();
-		dataService.dataObj.comics = vm.list;
+		dataService.dataObj.comics = vm.comicsList;
 		dataService.saveData(dataService.dataObj).then( function(response){
 			vm.changed = undefined;
 			vm.showAddBox(false);
 			vm.savestatustxt = response.data.status;
-			vm.savestatusicon = vm.statusclass["check"];
+			styles.savestatusicon = vm.statusclass["check"];
 			vm.fadeStatusMsg();
 			console.log("on saving the comics list, resp status: "+response.data.status);
 		});
@@ -261,9 +262,9 @@ ctrl.controller("ComicsController", [
 	}
 	
 	vm.resetItemChanged = function(){
-		if(vm.list.length){
-			for(var i=0; i<vm.list.length; i++){
-				vm.list[i].changed = undefined;
+		if(vm.comicsList.length){
+			for(var i=0; i<vm.comicsList.length; i++){
+				vm.comicsList[i].changed = undefined;
 			}
 		}
 	};	
@@ -275,13 +276,13 @@ ctrl.controller("ComicsController", [
 				console.log("on getting data, list: "+response.data.items);
 				dataService.dataObj = response.data.items;
 				if(dataService.dataObj.comics){
-					vm.list = dataService.dataObj.comics;
-					if(vm.list.length) vm.addToolTip();
+					vm.comicsList = dataService.dataObj.comics;
+					if(vm.comicsList.length) vm.addToolTip();
 					vm.changed = undefined;
 				}
 			}else{
 				var msg = "No response from server: no network, or no node.js";
-				messageService.displayAppError($scope.$parent.vm, msg);
+				messageService.displayAppError($scope.$parent, msg);
 			}
 		});		
 	};
@@ -293,7 +294,8 @@ ctrl.controller("ComicsController", [
 	vm.showAddBox(false);
 	
 	
-	//expose the vm using the $scope
+	//expose the vm to the $scope
+	$scope.styles = styles;
 	$scope.vm = vm;
 
 }]);

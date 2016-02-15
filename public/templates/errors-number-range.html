@@ -1,4 +1,15 @@
 <!-- number range errors -->
+<div class="error-msg" ng-show="archiveform.$invalid && archiveform.minRange.$error.numberLowerThan && !archiveform.$pristine">
+	<small class="error" 
+		ng-show="archiveform.minRange.$error.required && archiveform.minRange.$error.numberLowerThan">A minimum is required</small>
+	<small class="error" 
+		ng-show="archiveform.maxRange.$error.required && archiveform.maxRange.$error.numberGreaterThan">A maximum is required</small>
+	<small class="error" 
+		ng-show="archiveform.minRange.$touched && archiveform.maxRange.$touched &&
+		archiveform.minRange.$error.numberLowerThan &&  archiveform.maxRange.$error.numberGreaterThan &&
+		!archiveform.minRange.$error.required && !archiveform.maxRange.$error.required">The minimum should be lower than the maximum</small>
+</div>
+
 <div class="error-msg" ng-show="mainform.$invalid && mainform.minRange.$error.numberLowerThan && !mainform.$pristine">
 	<small class="error" 
 		ng-show="mainform.minRange.$error.required && mainform.minRange.$error.numberLowerThan">A minimum is required</small>

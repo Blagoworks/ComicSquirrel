@@ -43,7 +43,7 @@ initRange = function(obj){
 	//only for archive list
 	rf.obj.linksel = obj.linkselector;
 	if(obj.linkselector != undefined){
-		//pseudo-code - testing
+		//pseudo-code for testing
 		rf.doneArr[0] = true;
 		fetchComplete(1,1, "fetcher got a linkselector"); 
 		return;
@@ -86,7 +86,7 @@ initDoneArr = function(test, method, min, max){
 	var rangeLength = 0;
 	if(test) rangeLength = 1; 
 	else if(method=="number") rangeLength = max - min;		
-	else if(method=="date") rangeLength = Math.floor((max - min)/86400000); //get days within range
+	else if(method=="date") rangeLength = Math.floor((max - min)/86400000); //get nr of days within range
 
 	for(var i=0; i<rangeLength; i++){
 		rf.doneArr[i] = false;
@@ -362,15 +362,16 @@ exports.fetchRange = fetchRange;
 //more obj in "_protos/test range-fetcher incomingObj.txt"
 
 var incomingObj = {
-		"testrun": false,
+		"testrun": true,
 		"downloaddir": "/volume1/Media/Comics/",
-		"name": "FoxTrot",
-		"comicpage": "http://www.foxtrot.com/?p=200", //2014/02/23 = 200; 2016/01/24 = 1070
-		"imgdir": "", 
-		"imgselector": ".entry-content img",
+		"name": "test dir",
+		"comicpage": "http://lackadaisycats.com/archive.php",
+		"linkselector": "dd a",
+		"imgdir": "",
+		"imgselector": "#content > img",
 		"method": "number",
-		"min": "215",
-		"max": "225"
+		"min": "1",
+		"max": "10"
 		};
 
 initCounters();

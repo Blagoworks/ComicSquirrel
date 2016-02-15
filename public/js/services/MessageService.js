@@ -18,26 +18,28 @@ angular.module("MessageService", []).factory("messageService", ["$http", functio
 			return statusClassArr;
 		},
 		//on network err_connection_refused error
-		displayAppError: function(svm, msg){
-			var vm = svm;
+		displayAppError: function(scope, msg){
+			var vm = scope.vm;
+			var styles = scope.styles;
 			vm.appstatustxt = msg;
-			vm.appstatusicon = statusClassArr["error"];
+			styles.appstatusicon = statusClassArr["error"];
 			return;
 		},
 		//general app status
-		updateStatus: function(svm, time, cronstat){
+		updateStatus: function(scope, time, cronstat){
 			//svm ($scope.vm) can be just $scope.vm (in HeadCtrl), or $scope.$parent.vm (in SettingsCtrl)
-			var vm = svm;
+			var vm = scope.vm;
+			var styles = scope.styles;
 			var obj = {};
 			console.log("updateStatus, cronstat: "+cronstat);
 			if(cronstat=="ok"){
 				obj = { txt:"squirrel is set to run at "+time, key: statusClassArr["ok"] };
 				vm.appstatustxt = obj.txt;
-				vm.appstatusicon = obj.key;
+				styles.appstatusicon = obj.key;
 			}else{
 				obj = { txt:"squirrel cronjob is not running", key: statusClassArr["error"] };
 				vm.appstatustxt = obj.txt;
-				vm.appstatusicon = obj.key;
+				styles.appstatusicon = obj.key;
 			}			
 			return obj;
 		}

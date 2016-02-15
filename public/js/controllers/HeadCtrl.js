@@ -3,6 +3,7 @@ angular.module("HeadCtrl", []).controller("HeadController", [
 	
 	
 	var vm = {};
+	var styles = {};
 	//set class by arr[key]
 	vm.statusclass = messageService.getStatusClassArr();
 	vm.emptySettings = false;
@@ -10,7 +11,7 @@ angular.module("HeadCtrl", []).controller("HeadController", [
 	
 	vm.showSettingsWarning = function(){
 		vm.appstatustxt = "First, define your library directory in Settings";
-		vm.appstatusicon = vm.statusclass["pointright"];
+		styles.appstatusicon = vm.statusclass["pointright"];
 		vm.emptySettings = true;
 	};
 	vm.showCronStatus = function(obj){
@@ -28,7 +29,7 @@ angular.module("HeadCtrl", []).controller("HeadController", [
 					else cronstatus = "error";
 				});
 			}
-			messageService.updateStatus($scope.vm, timetorun, cronstatus);
+			messageService.updateStatus($scope, timetorun, cronstatus);
 		});
 	};
 	
@@ -42,7 +43,7 @@ angular.module("HeadCtrl", []).controller("HeadController", [
 			if(response.status==200 && response.data.items){
 				dataService.dataObj = response.data.items;
 				vm.appstatustxt = "loading status...";
-				vm.appstatusicon = undefined;
+				styles.appstatusicon = undefined;
 				
 				//show warning if no dl dir is defined in Settings 
 				if(dataService.dataObj.downloaddir==""){
@@ -53,11 +54,11 @@ angular.module("HeadCtrl", []).controller("HeadController", [
 					vm.showCronStatus(dataService.dataObj);
 				}else{
 					vm.appstatustxt = "no job running yet; check your settings";
-					vm.appstatusicon = vm.statusclass["waiting"];
+					styles.appstatusicon = vm.statusclass["waiting"];
 				}
 			}else{
 				var msg = "No response from server: no network, or no node.js";
-				messageService.displayAppError($scope.vm, msg);
+				messageService.displayAppError($scope, msg);
 			}	
 		});
 		
@@ -65,6 +66,7 @@ angular.module("HeadCtrl", []).controller("HeadController", [
 	
 
 	//expose the view using the $scope
+	$scope.styles = styles;
 	$scope.vm = vm;
 	
 	vm.showAppStatus();
