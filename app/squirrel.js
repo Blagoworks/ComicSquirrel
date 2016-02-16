@@ -23,11 +23,11 @@ initSqVars = function(){
 	sq.doneArr = [];
 }
 //event emitter
-var eventEmitter = require("events").EventEmitter;
+var squirrelEvtEmitter = require("events").EventEmitter;
 var squirrelEvt;
 //make sure there's only ONE eventEmitter per request
 initSqEvtEmitter = function(){	
-	squirrelEvt  = new eventEmitter();
+	squirrelEvt  = new squirrelEvtEmitter();
 	exports.squirrelEvt = squirrelEvt;
 	console.log("squirrel inited new eventEmitter");
 };
@@ -316,7 +316,7 @@ fetchNow = function(callback){
 	}
 	catch(err){
 		return callback(err);
-	}		
+	}
 }
 exports.fetchNow = fetchNow;
 

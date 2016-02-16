@@ -10,27 +10,49 @@ var cronPattern = "00 30 12 * * 1-5";
 var cronTimeStr = "12:30";
 //default cron: runs every weekday (Monday through Friday) at 12:30:00 hrs. Does not run on Saturday or Sunday.
 
-/* -- create a default cronjob object to be started later -- */
-try {
-	var job = new CronJob({
-		cronTime: cronPattern,
-		onTick: function() {
-			console.log("==== CRON TICK on "+ thisTickDate() +" ====");
-			squirrel.fetchNow(onSquirrelDone);
-		},
-		start: false
-	});	
-} catch(err) {
-	console.log("CRON pattern not valid!");
+
+// event emitter
+var cronEvtEmitter = require("events").EventEmitter;
+var cronEvt;
+var cronJob;
+var cronTickDone = false;
+
+initCronEvtEmitter = function(){	
+	cronEvt = new cronEvtEmitter();
+	exports.cronEvt = cronEvt;
+	console.log("cronManager inited new cronEvtEmitter");
 };
 
+/* create a default cronjob object to be started later */
+initCronJob = function(){
+	try {
+		cronJob = new CronJob({
+			cronTime: cronPattern,
+			onTick: function() {
+				console.log("==== CRON TICK on "+ thisTickDate() +" ====");
+				cronTickDone = true;
+				squirrel.fetchNow(onSquirrelDone);
+			},
+			start: false
+		});	
+	} catch(err) {
+		console.log("CRON pattern not valid!");
+	}
+}
+initCronEvtEmitter();
+initCronJob();
+
+	
+
 /* callback from onTick -> squirrel.fetchNow */
-onSquirrelDone = function(err,data){
+onSquirrelDone = function(err,msg){
 	if(err){
 		console.log("after cron tick, error from squirrel: "+err);
 	}else{
-		console.log("after cron tick, success from squirrel: "+data);
+		console.log("after cron tick, success from squirrel: "+msg);
 	}
+	if(cronTickDone == true) cronEvt.emit("CRON_DONE");
+	cronTickDone = false;
 };
 
 thisTickDate = function(){
@@ -58,7 +80,7 @@ setTimeToRun = function(timestr, callback){
 	cronTimeStr = timestr;
 	if(cronRunning){
 		cronRunning = false;
-		job.stop();
+		cronJob.stop();
 	}
 	
 	try{
@@ -71,12 +93,12 @@ setTimeToRun = function(timestr, callback){
 		return callback(err);
 	}
 	
-	job.cronTime = new CronTime(cronPattern);
-	job.start();
+	cronJob.cronTime = new CronTime(cronPattern);
+	cronJob.start();
 	cronRunning = true;
 	
 	var startDate = utils.formatDateStr( new Date() );
-	console.log("["+startDate+"] started cron job, runs on "+cronTimeStr+", pattern: "+job.cronTime);	
+	console.log("["+startDate+"] started cron cronJob, runs on "+cronTimeStr+", pattern: "+cronJob.cronTime);	
 	return callback(null,timestr);	
 };
 exports.setTimeToRun = setTimeToRun;
@@ -84,10 +106,10 @@ exports.setTimeToRun = setTimeToRun;
 
 //testing
 /* 
+
 // test:  node /volume1/development/ComicSquirrel/app/cron-manager.js
 report = function(err,str){
-	console.log("report: cron job set at "+str+", err: "+err );
+	console.log("report: cron cronJob set at "+str+", err: "+err );
 }
-setTimeToRun("10:31",report);
+setTimeToRun("16:20",report);
 */
-

@@ -6,28 +6,54 @@ ctrl.controller("ComicsController", [
 
 	var vm = {};
 	var styles = {};
-	vm.comicsList = [];
+	var cronDoneEvent = false;
 	
+	vm.comicsList = [];	
 	//set icon class by this arr[key] to manage icons in one place
 	vm.statusclass = messageService.getStatusClassArr(); 
 	
 	
-	vm.initComicData = function(){
+	vm.initComicsData = function(){
 		vm.savestatustxt = "";
-		//fill vm.comicsList with comicsObj via a GET call (handled in rest-router.js)
+		//fill vm.comicsList with comicsObj from server-side datafile
 		dataService.getData().then( function(response){
 			if(response.status==200 && response.data.items){
-				console.log("comicsCtrl - on getting data, status: "+response.data.status);
+				console.log("comicsCtrl inited - on getting data, status: "+response.data.status);
 				dataService.dataObj = response.data.items;
 				if(dataService.dataObj.comics){
 					vm.comicsList = dataService.dataObj.comics;
 					if(vm.comicsList.length) vm.addToolTip();
 				}
+				vm.initCronListener();
 			}else{
 				var msg = "No response from server: no network, or no node.js";
 				messageService.displayAppError($scope.$parent, msg);
 			}
 		});
+	};
+	
+	vm.onCronDone = function(event){
+		console.log("comicsCtrl: onCronDone called, cronDoneEvent: "+cronDoneEvent);
+		if(cronDoneEvent){
+			cronDoneEvent = false;			
+			vm.cronEvents.removeEventListener("CRON_DONE", vm.onCronDone);
+			vm.cronEvents.close();
+			vm.cronEvents = undefined;
+			console.log("comicsCtrl: onCronDone called; cron listener stopped, go init data");
+			vm.initComicsData();
+		}
+	}
+	vm.initCronListener = function(){
+		cronDoneEvent = true;
+		if(!vm.cronEvents){
+			console.log("comicsCtrl starting cron eventlisteners"); 
+			vm.cronEvents = new EventSource("/cronservice/events");
+			vm.cronEvents.addEventListener("CRON_DONE", vm.onCronDone, false); //after squirrel is done as callback of cron-tick 
+			vm.cronEvents.onerror = function(){
+				console.log("comicsCtrl: cronEvents fired error event");
+				vm.cronEvents.close();
+			};
+		}	
 	};
 	
 
@@ -98,7 +124,7 @@ ctrl.controller("ComicsController", [
 					//refresh list dl-data from server-side-saved dataObj: statusicon
 					vm.discardChange();
 				}
-				console.log("fetch result, status: "+response.data.status+", done: "+response.data.done);
+				console.log("runComicsFetch result, status: "+response.data.status+", done: "+response.data.done);
 			}
 			vm.fadeStatusMsg();			
 		});
@@ -290,7 +316,7 @@ ctrl.controller("ComicsController", [
 		
 	/* -----------------------init ctrl---------------------------*/
 	//onload, start with a closed addForm
-	vm.initComicData();
+	vm.initComicsData();
 	vm.showAddBox(false);
 	
 	

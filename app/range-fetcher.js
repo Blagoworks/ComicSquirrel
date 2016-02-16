@@ -24,14 +24,15 @@ initCounters = function(){
 };
 
 //event emitter
-var eventEmitter = require("events").EventEmitter;
+var fetchEvtEmitter = require("events").EventEmitter;
 var fetchEvt;
 //make sure there's only ONE eventEmitter per request
 initEventEmitter = function(){	
-	fetchEvt = new eventEmitter();
+	fetchEvt = new fetchEvtEmitter();
 	exports.fetchEvt = fetchEvt;
 	console.log("rangeFetcher inited new eventEmitter");
 };
+initEventEmitter();
 
 //start with initing vars
 initRange = function(obj){

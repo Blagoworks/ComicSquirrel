@@ -57,10 +57,10 @@ module.exports = function(app) {
 		//check on cronjob status
 		cronmngr.getCronStatus(function(err, data){
 			if(err){
-				console.log("cron not running");
+				console.log("router: cron not running");
 				res.send({ status: "cron not running, "+err.message });
 			}else{
-				console.log("cronjob is running");
+				console.log("router: cronjob is running");
 				res.send({ 
 					status: "cronjob is running OK",
 					timetorun: data 
@@ -72,10 +72,10 @@ module.exports = function(app) {
 	datarouter.get("/fetchservice", function(req, res, next) {
 		squirrel.fetchNow( function(err, data){
 			if(err){
-				console.log("squirrel dead");
+				console.log("router: squirrel dead");
 				res.send({ status: "squirrel not fetching, "+err.message });
 			}else{
-				console.log("squirrel is fetching");
+				console.log("router: squirrel is fetching");
 				res.send({ 
 					status: "squirrel fetch run done",
 					done: data 
@@ -83,58 +83,7 @@ module.exports = function(app) {
 			}
 		});
 	});
-
-	
-	//---server-side events route---
-	datarouter.get("/fetchservice/events", function(req, res){
-		// set timeout as high as possible
-		req.socket.setTimeout(0x7FFFFFFF); //=24days; Infinity causes rangeError
-
-		function startSse(res) {
-			res.writeHead(200, {
-				'Content-Type': 'text/event-stream',
-				'Cache-Control': 'no-cache',
-				'Connection': 'keep-alive'
-			});
-			res.write("\n");
-			
-			return function sendSse(name,data,id) {
-				res.write("event: " + name + "\n");
-				res.write("data: " + JSON.stringify(data) + "\n\n"); //parse it back into obj on client-side
-				if(id) res.write("id: " + id + "\n");
-				console.log("router: sendSse return-writing data for: "+name);		
-			}
-		}
-		
-		var sse = startSse(res);
-		
-		function sendSavedUpdate(msg) {
-			console.log("router: calling sse on ranger event FETCH_SAVED_IMG");
-			sse("FETCH_SAVED_IMG", msg);
-		}
-		function sendInitedUpdate() { sse("FETCH_INITED"); }
-		function sendDoneUpdate(obj) { sse("FETCH_DONE", obj); }
-		function sendDoneTestUpdate(obj) { sse("FETCH_TEST_DONE", obj); }
-	
-		var rangerEvt = ranger.fetchEvt; //event emitter in range-fetcher
-		
-		rangerEvt.on("FETCH_INITED", sendInitedUpdate);
-		rangerEvt.on("FETCH_SAVED_IMG", sendSavedUpdate);
-		rangerEvt.on("FETCH_DONE", sendDoneUpdate);		
-		rangerEvt.on("FETCH_TEST_DONE", sendDoneTestUpdate);
-				
-		req.once("end", function() {
-			console.log("router: /fetchservice/events end event fired");
-			rangerEvt.removeEventListener("FETCH_INITED", sendInitedUpdate);
-			rangerEvt.removeEventListener("FETCH_SAVED_IMG", sendSavedUpdate);
-			rangerEvt.removeEventListener("FETCH_DONE", sendDoneUpdate);		
-			rangerEvt.removeEventListener("FETCH_TEST_DONE", sendDoneTestUpdate);
-			
-			res.end();
-		});	
-	});
-	
-	
+	//get logfile
 	datarouter.get("/logservice", function(req, res, next) {
 		var logFile = apppaths.dataFile["logdata"];
 		logwriter.getLogFile(logFile, function(err, data){
@@ -149,6 +98,67 @@ module.exports = function(app) {
 				});
 			}
 		});
+	});
+
+	
+	//---GET/events - server-side events routes for fetch and cron---
+	startSse = function(res) {
+		res.writeHead(200, {
+			'Content-Type': 'text/event-stream',
+			'Cache-Control': 'no-cache',
+			'Connection': 'keep-alive'
+		});
+		res.write("\n");
+		
+		return function sendSse(name,data,id) {
+			res.write("event: " + name + "\n");
+			res.write("data: " + JSON.stringify(data) + "\n\n"); //parse it back into obj on client-side
+			if(id) res.write("id: " + id + "\n");
+			console.log("router: sendSse return-writing data for: "+name);		
+		}
+	};
+	
+	/* cronmngr event */	
+	datarouter.get("/cronservice/events", function(req, res){
+		req.socket.setTimeout(0x7FFFFFFF); //=24days; Infinity causes rangeError
+
+		var cronSse = startSse(res);
+		function sendCronDoneUpdate(){ cronSse("CRON_DONE"); }
+		var cronEvt = cronmngr.cronEvt;
+		cronEvt.on("CRON_DONE", sendCronDoneUpdate);
+		
+		req.once("end", function() {
+			console.log("router: /cronservice/events end event fired");
+			cronEvt.removeEventListener("CRON_DONE", sendCronDoneUpdate);			
+			res.end();
+		});	
+	});
+	/* range-fetcher events */
+	datarouter.get("/fetchservice/events", function(req, res){
+		// set timeout as high as possible
+		req.socket.setTimeout(0x7FFFFFFF); 
+
+		var sse = startSse(res);
+		/* sse calls */
+		function sendSavedUpdate(msg) { sse("FETCH_SAVED_IMG", msg); }
+		function sendInitedUpdate() { sse("FETCH_INITED"); }
+		function sendDoneUpdate(obj) { sse("FETCH_DONE", obj); }
+		function sendDoneTestUpdate(obj) { sse("FETCH_TEST_DONE", obj); }
+
+		var rangerEvt = ranger.fetchEvt; //event emitter in range-fetcher
+		rangerEvt.on("FETCH_INITED", sendInitedUpdate);
+		rangerEvt.on("FETCH_SAVED_IMG", sendSavedUpdate);
+		rangerEvt.on("FETCH_DONE", sendDoneUpdate);		
+		rangerEvt.on("FETCH_TEST_DONE", sendDoneTestUpdate);
+		
+		req.once("end", function() {
+			console.log("router: /fetchservice/events end event fired");
+			rangerEvt.removeEventListener("FETCH_INITED", sendInitedUpdate);
+			rangerEvt.removeEventListener("FETCH_SAVED_IMG", sendSavedUpdate);
+			rangerEvt.removeEventListener("FETCH_DONE", sendDoneUpdate);		
+			rangerEvt.removeEventListener("FETCH_TEST_DONE", sendDoneTestUpdate);
+			res.end();
+		});	
 	});
 	
 	

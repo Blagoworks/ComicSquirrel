@@ -129,7 +129,7 @@ var archivectrl = angular.module("ArchivedsCtrl", []).controller("ArchivedsContr
 		
 		vm.fetchEvents = new EventSource("/fetchservice/events");
 		
-		console.log("starting fetch eventlisteners "); 
+		console.log("archivedsCtrl starting fetch eventlisteners "); 
 			//+Object.keys(vm.fetchEvents) = onerror,onmessage,onopen,readyState,withCredentials,url,URL
 		
 		vm.fetchEvents.addEventListener("FETCH_INITED", vm.onFetchInited, false); //one time on initCounters
