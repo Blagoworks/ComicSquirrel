@@ -163,7 +163,7 @@ module.exports = function(app) {
 	
 	
 	
-	//PUT - send object with req
+	//PUT - send new object with req
 	//Replace the datafile with new data
 	datarouter.put("/dataservice", function(req, res, next) {	
 		var dataObj = req.body;
@@ -246,6 +246,32 @@ module.exports = function(app) {
 			res.end();
 		});
 	});
+	
+	//stop a fetch; send obj to range-fetcher
+	datarouter.put("/stopfetch", function(req, res, next) {
+		var obj = req.body;
+		//console.log("router put-call for fetchservice, go download archived comics in range");
+		ranger.stopFetch(obj, function(err, data){
+			try{
+				if(err){
+					console.log("router: stopFetch, Try error: "+err);
+					res.send({ status: "stopFetch error, "+err.message });
+				}else{
+					console.log("router: callback of stopFetch is returning data, fetch ended successful");
+					res.send({ 
+						status: "stopFetch successful",
+						result: data 
+					});
+				}
+			}
+			catch(err){
+				console.log("router: stopFetch, Catch error: "+err);
+			}
+			console.log("router: stopFetch, response end"+'\n');
+			res.end();
+		});
+	});
+	
 	
 	//replace logfile by empty one
 	datarouter.put("/logservice", function(req, res, next) {

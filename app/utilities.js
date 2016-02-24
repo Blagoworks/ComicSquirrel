@@ -61,9 +61,11 @@ exports.getNextFileUrlByNumber = getNextFileUrlByNumber;
 	
 
 //return base-url without page or date numbers
+//returns empty string when no number is found
 findUrlBeforeNumber = function(str){
-	var nr = str.match(/\d+$/)[0]; //get last nrs from str: must end with nrs!
-	var n = str.lastIndexOf(nr);	//return index
+	var nr = str.match(/\d+$/);
+	var i = (nr!=null)? str.match(/\d+$/)[0] : 0; //prevent errors on no nr match
+	var n = str.lastIndexOf(i);	
 	return str.substr(0,n);
 };
 exports.findUrlBeforeNumber = findUrlBeforeNumber;
@@ -82,6 +84,14 @@ findUrlBeforeDate = function(str,regex){
 	}
 }
 exports.findUrlBeforeDate = findUrlBeforeDate;
+
+findUrlBeforePage = function(str){
+	var n = str.lastIndexOf("/");
+	var hrf = str.substr(0,n+1);
+	
+	return (hrf!="http://")? hrf : str+"/";
+};
+exports.findUrlBeforePage = findUrlBeforePage;
 
 
 getUrlDateStr = function(date,format){

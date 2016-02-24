@@ -31,12 +31,17 @@
 						</div>
 						
 						<div class="btn-row text-right">
+							<button type="button" class="btn btn-primary"
+								ng-click="vm.stopFetch(archiveFormData)"
+								ng-show="vm.fetchingInProgress">Stop</button>	
+								
 							<button type="button" class="btn"
 								ng-click="vm.fetchArchiveds(archiveFormData,'testrun')"
-								ng-disabled="!archiveform.$dirty || archiveform.$invalid">Test</button>
+								ng-disabled="!archiveform.$dirty || archiveform.$invalid || vm.fetchingInProgress">Test</button>
 							<button type="submit" class="btn btn-primary"
 								ng-click="vm.fetchArchiveds(archiveFormData,'full')"
-								ng-disabled="!archiveform.$dirty || archiveform.$invalid">Fetch</button>
+								ng-disabled="!archiveform.$dirty || archiveform.$invalid || vm.fetchingInProgress">Fetch</button>
+								
 							<button type="button" class="btn"
 								ng-disabled="!archiveform.$dirty"
 								ng-click="vm.resetForm('archiveform');">Clear form</button>
@@ -57,12 +62,16 @@
 						</div>
 						
 						<div class="btn-row text-right">
+							<button type="button" class="btn btn-primary"
+								ng-click="vm.stopFetch(pageFormData)"
+								ng-show="vm.fetchingInProgress">Stop</button>	
+								
 							<button type="button" class="btn"
 								ng-click="vm.fetchArchiveds(pageFormData,'testrun')"
-								ng-disabled="!mainform.$dirty || mainform.$invalid">Test</button>
+								ng-disabled="!mainform.$dirty || mainform.$invalid || vm.fetchingInProgress">Test</button>
 							<button type="submit" class="btn btn-primary"
 								ng-click="vm.fetchArchiveds(pageFormData,'full')"
-								ng-disabled="!mainform.$dirty || mainform.$invalid">Fetch</button>
+								ng-disabled="!mainform.$dirty || mainform.$invalid || vm.fetchingInProgress">Fetch</button>
 							<button type="button" class="btn"
 								ng-disabled="!mainform.$dirty"
 								ng-click="vm.resetForm('mainform');">Clear form</button>
@@ -83,12 +92,16 @@
 							</div>
 							
 							<div class="btn-row text-right">
+								<button type="button" class="btn btn-primary"
+									ng-click="vm.stopFetch(imgFormData)"
+									ng-show="vm.fetchingInProgress">Stop</button>
+									
 								<button type="button" class="btn"
 									ng-click="vm.fetchArchiveds(imgFormData,'testrun')"
-									ng-disabled="!tab2form.$dirty || tab2form.$invalid">Test</button>
+									ng-disabled="!tab2form.$dirty || tab2form.$invalid || vm.fetchingInProgress">Test</button>
 								<button type="submit" class="btn btn-primary"
 									ng-click="vm.fetchArchiveds(imgFormData,'full')"
-									ng-disabled="!tab2form.$dirty || tab2form.$invalid">Fetch</button>
+									ng-disabled="!tab2form.$dirty || tab2form.$invalid || vm.fetchingInProgress">Fetch</button>
 								<button type="button" class="btn"
 									ng-disabled="!tab2form.$dirty"
 									ng-click="vm.resetForm('tab2form');">Clear form</button>

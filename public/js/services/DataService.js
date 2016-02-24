@@ -7,6 +7,7 @@ angular.module("DataService", []).factory("dataService", ["$http", function($htt
 	var portroot 	= "/portsetting";
 	var testroot	= "/testservice";
 	var fetchroot 	= "/fetchservice";
+	var stopfetch 	= "/stopfetch";
 	var logroot 	= "/logservice";
 	
 	return {
@@ -38,6 +39,9 @@ angular.module("DataService", []).factory("dataService", ["$http", function($htt
 		},
 		fetchArchiveds:function(obj){
 			return $http.put(fetchroot, obj);
+		},
+		stopFetching:function(obj){
+			return $http.put(stopfetch, obj);
 		},
 		//log data
 		getLogs:function(){

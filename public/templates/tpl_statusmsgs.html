@@ -5,20 +5,28 @@
 		<span class="roll-evt"><span class="count" ng-class="{'new':vm.countchanged}" data-title="{{vm.newcount}}">{{vm.oldcount}}</span></span>
 	</span>
 </div>
-<div class="fetch-msg" ng-show="vm.fetchingDone && vm.fetchTestResult">
-	<i class="fa" ng-class="styles.fetchstatusicon"></i>
-	<span class="msg">{{vm.teststatustxt}} {{vm.errormsg}}</span>
-</div>
-<div class="fetch-msg" ng-show="vm.fetchingDone && !vm.fetchTestResult && !vm.errormsg">
-	<i class="fa" ng-class="styles.fetchstatusicon"></i>
-	<span class="msg">Finished! Downloaded <span class="badge">{{vm.dlcount}}</span>{{vm.imgstr}}{{vm.skipped}} </span>
-</div>
-<div class="fetch-msg" ng-show="vm.fetchingDone && !vm.fetchTestResult && vm.errormsg">
-	<i class="fa" ng-class="styles.fetchstatusicon"></i>
-	<span class="msg">Downloaded <span class="badge">{{vm.dlcount}}</span> {{vm.imgstr}}{{vm.skipped}}. 
-		Stopped on an error ({{vm.errormsg}})</span>
-</div>
+
 <div class="fetch-msg" ng-show="vm.fetchingError">
 	<i class="fa" ng-class="styles.fetchstatusicon"></i>
 	<span class="msg">Fetch error: nothing found. {{vm.errormsg}}</span>
 </div>
+<div class="fetch-msg" ng-show="vm.fetchingDone && vm.fetchingStopped">
+	<i class="fa" ng-class="styles.fetchstatusicon"></i>
+	<span class="msg">Fetching was stopped. Downloaded <span class="badge">{{vm.dlcount}}</span>{{vm.imgstr}}{{vm.skipped}}</span>
+</div>
+<div class="fetch-msg" ng-show="vm.fetchingDone && !vm.fetchingStopped && vm.fetchTestResult">
+	<i class="fa" ng-class="styles.fetchstatusicon"></i>
+	<span class="msg">{{vm.teststatustxt}} {{vm.errormsg}}</span>
+</div>
+<div class="fetch-msg" ng-show="vm.fetchingDone && !vm.fetchingStopped && !vm.fetchTestResult && vm.errormsg">
+	<i class="fa" ng-class="styles.fetchstatusicon"></i>
+	<span class="msg">Downloaded <span class="badge">{{vm.dlcount}}</span> {{vm.imgstr}}{{vm.skipped}}. 
+		Stopped on an error ({{vm.errormsg}})</span>
+</div>
+<div class="fetch-msg" ng-show="vm.fetchingDone && !vm.fetchingStopped && !vm.fetchTestResult && !vm.errormsg">
+	<i class="fa" ng-class="styles.fetchstatusicon"></i>
+	<span class="msg">Finished! Downloaded <span class="badge">{{vm.dlcount}}</span>{{vm.imgstr}}{{vm.skipped}} </span>
+</div>
+
+
+

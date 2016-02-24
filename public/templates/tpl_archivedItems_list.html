@@ -10,7 +10,7 @@
 
 	<div class="form-group">
 		<label for="pageurl">Archive page url:</label>
-		<input type="url" class="form-control flexw-40" name="pageurl" placeholder="http://comicsite/comic.php?comicid=1"
+		<input type="url" class="form-control flexw-40" name="pageurl" placeholder="http://comicsite/archive.php"
 			ng-model="archiveFormData.firstUrl" 
 			ng-model-options="{ updateOn:'blur' }" required>
 		<p class="help-block">The url of the comics' Archive page</p>
@@ -19,7 +19,7 @@
 	
 	<div class="form-group">
 		<label for="linkselector">Link selector:</label>
-		<input type="text" class="form-control flexw-40" name="linkselector" placeholder="Selector of link pointing to comic pages"
+		<input type="text" class="form-control flexw-40" name="linkselector" placeholder="Selector of *the link* pointing to comic pages"
 			ng-model="archiveFormData.linkselector"
 			ng-model-options="{ updateOn:'blur' }"	
 			ng-minlength=3 ng-maxlength=30 required>
